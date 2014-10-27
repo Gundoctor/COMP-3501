@@ -1,0 +1,45 @@
+﻿Build started 10/26/2014 10:31:04 PM.
+     1>Project "D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\transforms1.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (transforms1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         D:\Programs\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\\" /IDebug\ /I"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\\" /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _DEBUG /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\pch.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /wd4453 /wd28204 /FU"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.VCLibs\12.0\References\CommonConfiguration\neutral\platform.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /analyze- /errorReport:prompt /bigobj Content\Sample3DSceneRenderer.cpp
+         Sample3DSceneRenderer.cpp
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(125): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(128): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(447): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(455): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(482): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(506): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(507): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(510): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(515): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(516): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(519): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(524): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(527): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(532): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(535): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\folders\documents\carleton\third year\game programming\game\comp-3501\game\assignment 3\assignment3\transforms1\content\sample3dscenerenderer.cpp(500): warning C4101: 'L' : unreferenced local variable
+       Link:
+         D:\Programs\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:\Programs\Microsoft Visual Studio 12.0\VC\\lib\store" /LIBPATH:"D:\Programs\Microsoft Visual Studio 12.0\VC\\lib" d2d1.lib d3d11.lib dxgi.lib ole32.lib windowscodecs.lib dwrite.lib xaudio2.lib mfcore.lib mfplat.lib mfreadwrite.lib xinput.lib mfuuid.lib kernel32.lib /MANIFEST:NO /DEBUG /PDB:"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD /WINMDFILE:"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\Assignment3.res
+         Debug\Asteroid.obj
+         Debug\Beam.obj
+         Debug\EntityObjectDrawer.obj
+         Debug\GameEntity.obj
+         Debug\InputManager.obj
+         Debug\OverlayManager.obj
+         Debug\SoundPlayer.obj
+         Debug\App.obj
+         Debug\DeviceResources.obj
+         Debug\DirectXGame2Main.obj
+         Debug\Sample3DSceneRenderer.obj
+         Debug\SampleDebugTextRenderer.obj
+         Debug\SampleVirtualControllerRenderer.obj
+         Debug\pch.obj
+         Debug\SpaceShip.obj
+         transforms1.vcxproj -> D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe
+     1>Done Building Project "D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\transforms1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.98
