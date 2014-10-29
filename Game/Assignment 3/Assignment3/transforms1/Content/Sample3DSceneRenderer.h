@@ -15,6 +15,7 @@
 #include "SpaceShip.h"
 #include "Beam.h"
 #include "Asteroid.h"
+#include "PickUP.h"
 
 
 using namespace DirectX;
@@ -44,6 +45,7 @@ namespace DirectXGame2
         void Rotate(float radians);
 		void DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
 		void CreateAsteroidField();
+		void CreateLootBoxes();
 		void CreateCamera(); 
 		void CollisionDetection(); 
 		void CreateBaseCube();
@@ -88,11 +90,15 @@ namespace DirectXGame2
 
 		Asteroid aField[1500];
 
-		int numast;
+		PickUp lootBoxes[300];
+
+		int numast, numBoxes;
 		Asteroids debris[1500];
+		float lootRad = 0.5;
 		float astRad = 1.0;
 		float shipRad = 0.5;
 		float screenFlash = 0.0;
+		int score = 0;
 
     };
 }

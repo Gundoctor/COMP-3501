@@ -28,6 +28,7 @@ m_deviceResources(deviceResources)
 	CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
 	CreateAsteroidField();
+	CreateLootBoxes();
 	CreateCamera();
 }
 
@@ -121,6 +122,22 @@ void Sample3DSceneRenderer::CreateAsteroidField()
 	}
 }
 
+void Sample3DSceneRenderer::CreateLootBoxes()
+{
+	numBoxes = 300;
+	XMVECTOR angles;
+
+	for (int i = 0; i < numBoxes; i++)
+	{
+		angles = XMVectorSet(3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 1.0f);
+		lootBoxes[i].setPos(XMVectorSet(600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 1.0f));
+		lootBoxes[i].setOri(XMQuaternionRotationRollPitchYawFromVector(angles));
+		angles = XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f);
+
+		lootBoxes[i].setL(XMQuaternionRotationRollPitchYawFromVector(angles));
+	}
+}
+
 void Sample3DSceneRenderer::CollisionDetection() 
 {
 
@@ -195,6 +212,29 @@ void Sample3DSceneRenderer::CollisionDetection()
 		{
 			ship.setIsHit(true);
 			ship.setIsHit2(true);
+		}
+
+		
+	}
+
+	//check to see if we hit a loot box
+
+
+	for (int i = 0; i < numBoxes; i++)
+	{
+		XMFLOAT4 camPos, lootPos;
+		XMStoreFloat4(&camPos, ship.getPos());
+		XMStoreFloat4(&lootPos, lootBoxes[i].getPos());
+
+		float dx = camPos.x - lootPos.x;
+		float dy = camPos.y - lootPos.y;
+		float dz = camPos.z - lootPos.z;
+		float length = sqrt(dx*dx + dy*dy + dz*dz);
+
+		if (fabs(length) < lootRad + shipRad && !lootBoxes[i].getShouldBeDel())
+		{
+			score += 100;
+			lootBoxes[i].setShouldBeDel(true);
 		}
 	}
 
@@ -298,6 +338,8 @@ void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
 	{
 		aField[i].Update(timer);
 	}
+
+	//no rotation for loot boxes for now. 
 }
 
 
@@ -379,6 +421,16 @@ void Sample3DSceneRenderer::Render()
 		{
 			thexform = XMMatrixRotationQuaternion(aField[i].getOri());
 			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(aField[i].getPos()));
+			DrawOne(context, &thexform);
+		}
+	}
+	for (int i = 0; i < numBoxes; i++)
+	{ // draw every lootBox
+		//draw not "destroyed" lootBoxes
+		if (!lootBoxes[i].getShouldBeDel())
+		{
+			thexform = XMMatrixRotationQuaternion(lootBoxes[i].getOri());
+			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(lootBoxes[i].getPos()));
 			DrawOne(context, &thexform);
 		}
 	}
