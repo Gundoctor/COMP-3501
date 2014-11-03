@@ -103,9 +103,6 @@
     <ClCompile Include="GameEntity.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
-    <ClCompile Include="EntityObjectDrawer.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
     <ClCompile Include="Beam.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
@@ -127,9 +124,6 @@
       <Filter>Content\Game Entity</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="EntityObjectDrawer.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClInclude Include="Beam.h">
       <Filter>Content\Game Entity</Filter>
     </ClInclude>

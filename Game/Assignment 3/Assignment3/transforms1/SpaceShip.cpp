@@ -15,11 +15,6 @@ fireOkay(true), beamFired(false)
 }
 
 
-void SpaceShip::Draw(ID3D11DeviceContext2 *context, XMMATRIX *thexform)
-{
-
-}
-
 void SpaceShip::Update(DX::StepTimer const& timer)
 {
 

@@ -14,11 +14,6 @@ void PickUp::Update(DX::StepTimer const& timer)
 	ori = XMQuaternionMultiply(ori, L);
 }
 
-void PickUp::Draw(ID3D11DeviceContext2 *context, XMMATRIX *thexform)
-{
-
-}
-
 
 void PickUp::setL(XMVECTOR inL)
 {

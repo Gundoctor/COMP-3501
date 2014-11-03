@@ -16,7 +16,6 @@ namespace DirectXGame2{
 	public:
 		Beam();
 		virtual void Update(DX::StepTimer const& timer);
-		virtual void Draw(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
 
 		void setForward(XMVECTOR);
 		void setDistance(int);

@@ -17,7 +17,6 @@ namespace DirectXGame2{
 
 
 		virtual void Update(DX::StepTimer const& timer);
-		virtual void Draw(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
 		void FireBeam();
 		void CameraMove(float, float);
 		void CameraSpin(float, float, float);

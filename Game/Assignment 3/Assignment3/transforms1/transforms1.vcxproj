@@ -191,7 +191,6 @@
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Beam.h" />
-    <ClInclude Include="EntityObjectDrawer.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="PickUP.h" />
     <ClInclude Include="Helpers\InputManager.h" />
@@ -213,7 +212,6 @@
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Beam.cpp" />
-    <ClCompile Include="EntityObjectDrawer.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="Helpers\InputManager.cpp" />
     <ClCompile Include="Helpers\OverlayManager.cpp" />

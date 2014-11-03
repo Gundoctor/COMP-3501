@@ -14,11 +14,6 @@ void Asteroid::Update(DX::StepTimer const& timer)
 	ori = XMQuaternionMultiply(ori, L);
 }
 
-void Asteroid::Draw(ID3D11DeviceContext2 *context, XMMATRIX *thexform)
-{
-
-}
-
 
 void Asteroid::setL(XMVECTOR inL)
 {

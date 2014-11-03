@@ -21,11 +21,6 @@ void Beam::Update(DX::StepTimer const& timer)
 	distance += 1;
 }
 
-void Beam::Draw(ID3D11DeviceContext2 *context, XMMATRIX *thexform)
-{
-
-}
-
 
 void Beam::setForward(XMVECTOR inForward)
 {
