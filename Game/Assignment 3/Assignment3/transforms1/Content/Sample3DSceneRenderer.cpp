@@ -29,6 +29,7 @@ m_deviceResources(deviceResources)
 	CreateWindowSizeDependentResources();
 	CreateAsteroidField();
 	CreateLootBoxes();
+	CreateEnemyBases();
 	CreateCamera();
 }
 
@@ -138,6 +139,20 @@ void Sample3DSceneRenderer::CreateLootBoxes()
 	}
 }
 
+void Sample3DSceneRenderer::CreateEnemyBases()
+{
+	eBasePos = XMVectorSet(400, 500, 300, 1.0f);
+	eBaseOri = XMQuaternionRotationRollPitchYawFromVector(XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f));
+
+	for (int i = 0; i < 10; i++)
+	{
+		enemies[i].setOri(eBaseOri);
+		enemies[i].setPos(eBasePos);
+		enemies[i].setL(XMQuaternionRotationRollPitchYawFromVector(XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f)));
+	}
+}
+
+
 void Sample3DSceneRenderer::CollisionDetection() 
 {
 
@@ -171,12 +186,10 @@ void Sample3DSceneRenderer::CollisionDetection()
 		for (int j = 0; j < ship.getNumBeam(); j++)
 		{
 			
-			//XMVECTOR oc = XMVectorSubtract(sBeams[j].getPos(), debris[i].pos);
 			XMVECTOR oc = XMVectorSubtract(sBeams[j].getPos(), aField[i].getPos());
 
 			XMFLOAT4 dotVec, ocAbs;
 
-			//XMStoreFloat4(&dotVec, XMVector4Dot(XMVector4Normalize(beams[j].forward), oc));
 			XMStoreFloat4(&dotVec, XMVector4Dot(XMVector4Normalize(sBeams[j].getForward()), oc));
 
 			XMStoreFloat4(&ocAbs, oc);
@@ -190,7 +203,6 @@ void Sample3DSceneRenderer::CollisionDetection()
 			if (val >= 0)
 			{
 				//Is an intersection
-
 				float d = -dot + sqrt(val);
 				if (d < astRad)
 				{
@@ -213,13 +225,9 @@ void Sample3DSceneRenderer::CollisionDetection()
 			ship.setIsHit(true);
 			ship.setIsHit2(true);
 		}
-
-		
 	}
 
 	//check to see if we hit a loot box
-
-
 	for (int i = 0; i < numBoxes; i++)
 	{
 		XMFLOAT4 camPos, lootPos;
@@ -237,6 +245,54 @@ void Sample3DSceneRenderer::CollisionDetection()
 			lootBoxes[i].setShouldBeDel(true);
 		}
 	}
+
+
+	XMFLOAT4 camPos, basePos;
+	XMStoreFloat4(&camPos, ship.getPos());
+	XMStoreFloat4(&basePos, eBasePos);
+
+	float dx = camPos.x - basePos.x;
+	float dy = camPos.y - basePos.y;
+	float dz = camPos.z - basePos.z;
+	float length = sqrt(dx*dx + dy*dy + dz*dz);
+
+	if (fabs(length) < baseRad + shipRad)
+	{
+		ship.setIsHit(true);
+		ship.setIsHit2(true);
+	}
+
+	if (!isWithinRange)
+	{
+		if (fabs(length) < baseRange + shipRad)
+		{
+			isWithinRange = true;
+			launchOK = true;
+		}
+	}
+	else
+	{
+		//check to see if we hit an enemy
+		for (int i = 0; i < 10; i++)
+		{
+			XMFLOAT4 camPos, enPos;
+			XMStoreFloat4(&camPos, ship.getPos());
+			XMStoreFloat4(&enPos, enemies[i].getPos());
+
+			float dx = camPos.x - enPos.x;
+			float dy = camPos.y - enPos.y;
+			float dz = camPos.z - enPos.z;
+			float length = sqrt(dx*dx + dy*dy + dz*dz);
+
+			if (fabs(length) < eRad + shipRad && !enemies[i].getShouldBeDel())
+			{
+				enemies[i].setShouldBeDel(true);
+				ship.setIsHit(true);
+				ship.setIsHit2(true);
+			}
+		}
+	}
+
 
 }
 
@@ -327,8 +383,6 @@ void Sample3DSceneRenderer::UpdatePlayer(DX::StepTimer const& timer)
 	// remake view matrix, store in constant buffer data
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookToRH(ship.getPos(), ship.getForward(), ship.getUp())));
 	// constant buffer data is headed to card on per-object basis, so no need to reset here
-
-
 }
 
 void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
@@ -337,6 +391,15 @@ void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
 	for (int i = 0; i < numast; i++)
 	{
 		aField[i].Update(timer);
+	}
+
+	if (isWithinRange)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			enemies[i].Update(timer);
+		}
+
 	}
 
 	//no rotation for loot boxes for now. 
@@ -410,9 +473,25 @@ void Sample3DSceneRenderer::Render()
         m_pixelShader.Get(),
         nullptr,
         0
-        );
+		);
+
 
 	XMMATRIX thexform;
+
+	ManageScreenFlash(context);
+	ManageEnemies(context);
+	ManageTargetReticle(context);
+
+	//Draw enemy base
+	thexform = XMMatrixRotationQuaternion(eBaseOri);
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBasePos));
+	thexform = XMMatrixMultiply(XMMatrixScaling(3, 3, 3), thexform);
+	DrawOne(context, &thexform);
+
+
+	ManageBeamFire(context);
+
+
 	
 	for (int i = 0; i < numast; i++)
 	{ // draw every asteroid
@@ -435,11 +514,6 @@ void Sample3DSceneRenderer::Render()
 		}
 	}
 
-	ManageTargetReticle(context);
-	ManageBeamFire(context);
-	ManageScreenFlash(context);
-
-
 	XMFLOAT4 camPos;
 	XMStoreFloat4(&camPos, ship.getPos());
 	
@@ -453,8 +527,63 @@ void Sample3DSceneRenderer::FireBeam()
 	ship.FireBeam();
 }
 
+void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
+{
+	XMMATRIX thexform;
+
+	if (isWithinRange)
+	{
+		if (currEnemyNum <= 10)
+		{
+			if (launchOK)
+			{
+				enemyLaunchCounter = 0;
+
+				enemies[currEnemyNum].setSpeed(0.5);
+				++currEnemyNum;
+
+				launchOK = false;
+			}
+			else if (enemyLaunchCounter < enemyLaunchCount) {
+				enemyLaunchCounter++;
+			}
+			else if (enemyLaunchCounter == enemyLaunchCount && currEnemyNum != 10)
+			{
+				enemyLaunchCounter++;
+				launchOK = true;
+			}
+
+			for (int i = 0; i < currEnemyNum; i++)
+			{
+				if (!enemies[i].getShouldBeDel())
+				{
+					//lazy way for now
+					XMVECTOR shipDir = ship.getPos() - enemies[i].getPos();
+					shipDir = XMVector4Normalize(shipDir);
+
+					enemies[i].setForward(shipDir);
+
+
+					thexform = XMMatrixRotationQuaternion(enemies[i].getOri());
+					thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(enemies[i].getPos()));
+					thexform = XMMatrixMultiply(XMMatrixScaling(0.5, 0.5, 0.5), thexform);
+					DrawOne(context, &thexform);
+
+
+					if (enemies[i].getDistance() > 200)
+					{
+						enemies[i].setShouldBeDel(false);
+					}
+				}
+			}
+		}
+	}
+}
+
 void Sample3DSceneRenderer::ManageBeamFire(ID3D11DeviceContext2 *context)
 {
+	CreateBaseCube();
+
 	XMMATRIX thexform;
 
 	Beam *sBeams = ship.getBeams();
@@ -511,7 +640,6 @@ void Sample3DSceneRenderer::ManageScreenFlash(ID3D11DeviceContext2 *context)
 
 	ship.setStunTimer(stunTimer);
 
-	CreateBaseCube();
 }
 
 void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
@@ -557,7 +685,6 @@ void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
 	thexform = XMMatrixMultiply(XMMatrixScaling(0.625, 0.05, 0.05), thexform);
 	DrawOne(context, &thexform);
 
-	CreateBaseCube();
 }
 
 

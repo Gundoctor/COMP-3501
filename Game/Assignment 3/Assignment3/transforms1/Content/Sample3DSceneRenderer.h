@@ -11,11 +11,12 @@
 #include "ShaderStructures.h"
 #include "..\Helpers\StepTimer.h"
 
-#include "GameEntity.h"
-#include "SpaceShip.h"
-#include "Beam.h"
-#include "Asteroid.h"
-#include "PickUP.h"
+#include ".\Content\Game Entity\GameEntity.h"
+#include ".\Content\Game Entity\SpaceShip.h"
+#include ".\Content\Game Entity\Beam.h"
+#include ".\Content\Game Entity\Asteroid.h"
+#include ".\Content\Game Entity\PickUP.h"
+#include ".\Content\Game Entity\Enemy.h"
 
 
 using namespace DirectX;
@@ -46,6 +47,7 @@ namespace DirectXGame2
 		void DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
 		void CreateAsteroidField();
 		void CreateLootBoxes();
+		void CreateEnemyBases();
 		void CreateCamera(); 
 		void CollisionDetection(); 
 		void CreateBaseCube();
@@ -54,6 +56,7 @@ namespace DirectXGame2
 		void ManageScreenFlash(ID3D11DeviceContext2 *context);
 		void ManageBeamFire(ID3D11DeviceContext2 *context);
 		void ManageTargetReticle(ID3D11DeviceContext2 *context);
+		void ManageEnemies(ID3D11DeviceContext2 *context);
     private:
         // Cached pointer to device resources.
         std::shared_ptr<DX::DeviceResources> m_deviceResources;
@@ -79,23 +82,29 @@ namespace DirectXGame2
 		// Variables for player
 		SpaceShip ship;
 
-		// Variables for asteroid field
-		typedef struct Asteroids {
-			XMVECTOR pos; // position
-			XMVECTOR ori; // orientation
-			XMVECTOR L; // angular momentum (use as velocity)
-			XMVECTOR vel; // linear velocity
-			bool shouldBeDel;
-		};
-
 		Asteroid aField[1500];
 
 		PickUp lootBoxes[300];
 
+		//all this stuff will be changed later
+		Enemy enemies[10];
+		XMVECTOR eBasePos;
+		XMVECTOR eBaseOri;
+		XMVECTOR eBaseL;
+		float turnAngle;
+		bool isWithinRange = false;
+		bool launchOK = false;
+		bool startLaunch = false;
+		int enemyLaunchCounter = 1000;
+		int enemyLaunchCount = 80;
+		int currEnemyNum = 0;
+
 		int numast, numBoxes;
-		Asteroids debris[1500];
 		float lootRad = 0.5;
 		float astRad = 1.0;
+		float eRad = 1.0;
+		float baseRange = 300;
+		float baseRad = 3.0;
 		float shipRad = 0.5;
 		float screenFlash = 0.0;
 		int score = 0;

@@ -24,6 +24,6 @@ namespace DirectXGame2
     struct VertexPositionColor
     {
         DirectX::XMFLOAT3 pos;
-        DirectX::XMFLOAT3 color;
+		DirectX::XMFLOAT3 color;
     };
 }

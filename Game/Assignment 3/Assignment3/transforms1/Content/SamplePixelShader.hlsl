@@ -6,10 +6,11 @@
 //// Copyright (c) Microsoft Corporation. All rights reserved
 
 // Per-pixel color data passed through the pixel shader.
+
 struct PixelShaderInput
 {
     float4 pos : SV_POSITION;
-    float3 color : COLOR0;
+	float3 color : COLOR0;
 };
 
 // A pass-through function for the (interpolated) color data.

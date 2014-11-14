@@ -1278,7 +1278,7 @@ void InputManager::TranslateKeyboardToPlayerActionsMap()
 			playerInput->ID = DEFAULT_KEYBOARD_PLAYER_ID;
 			playerInput->PlayerAction = PLAYER_ACTION_TYPES::INPUT_MOVE;
 			playerInput->NormalizedInputValue = -1.f;
-			playerInput->Roll = 1.0f;// start rolling
+			playerInput->Roll = 3.0f;// start rolling
 
 			AddPlayerActionToMap(playerInput);
 		}
@@ -1291,7 +1291,7 @@ void InputManager::TranslateKeyboardToPlayerActionsMap()
 			playerInput->ID = DEFAULT_KEYBOARD_PLAYER_ID;
 			playerInput->PlayerAction = PLAYER_ACTION_TYPES::INPUT_MOVE;
 			playerInput->NormalizedInputValue = 1.f;
-			playerInput->Roll = -1.0f;// start rolling
+			playerInput->Roll = -3.0f;// start rolling
 
 			AddPlayerActionToMap(playerInput);
 		}
@@ -1303,7 +1303,7 @@ void InputManager::TranslateKeyboardToPlayerActionsMap()
 			playerInput->ID = DEFAULT_KEYBOARD_PLAYER_ID;
 			playerInput->PlayerAction = PLAYER_ACTION_TYPES::INPUT_MOVE;
 			playerInput->NormalizedInputValue = -1.f;
-			playerInput->Pitch = 1.0f;// pitch up
+			playerInput->Pitch = 3.0f;// pitch up
 
 			AddPlayerActionToMap(playerInput);
 		}
@@ -1315,7 +1315,7 @@ void InputManager::TranslateKeyboardToPlayerActionsMap()
 			playerInput->ID = DEFAULT_KEYBOARD_PLAYER_ID;
 			playerInput->PlayerAction = PLAYER_ACTION_TYPES::INPUT_MOVE;
 			playerInput->NormalizedInputValue = -1.f;
-			playerInput->Pitch = -1.0f; // pitch down
+			playerInput->Pitch = -3.0f; // pitch down
 
 			AddPlayerActionToMap(playerInput);
 		}

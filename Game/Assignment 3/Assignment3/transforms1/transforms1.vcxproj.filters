@@ -97,19 +97,22 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="DirectXGame2Main.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="SpaceShip.cpp">
+    <ClCompile Include="Content\Game Entity\Asteroid.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
+    <ClCompile Include="Content\Game Entity\Beam.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Beam.cpp">
+    <ClCompile Include="Content\Game Entity\GameEntity.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroid.cpp">
+    <ClCompile Include="Content\Game Entity\PickUp.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
-    <ClCompile Include="PickUp.cpp">
+    <ClCompile Include="Content\Game Entity\SpaceShip.cpp">
+      <Filter>Content\Game Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Game Entity\Enemy.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
   </ItemGroup>
@@ -117,20 +120,23 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="DirectXGame2Main.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="SpaceShip.h">
-      <Filter>Content\Game Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEntity.h">
-      <Filter>Content\Game Entity</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Beam.h">
+    <ClInclude Include="Content\Game Entity\Asteroid.h">
       <Filter>Content\Game Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Asteroid.h">
+    <ClInclude Include="Content\Game Entity\Beam.h">
       <Filter>Content\Game Entity</Filter>
     </ClInclude>
-    <ClInclude Include="PickUP.h">
+    <ClInclude Include="Content\Game Entity\GameEntity.h">
+      <Filter>Content\Game Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Game Entity\PickUP.h">
+      <Filter>Content\Game Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Game Entity\SpaceShip.h">
+      <Filter>Content\Game Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Game Entity\Enemy.h">
       <Filter>Content\Game Entity</Filter>
     </ClInclude>
   </ItemGroup>
@@ -142,5 +148,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assignment3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\shulk.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
 </Project>

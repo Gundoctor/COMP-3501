@@ -184,15 +184,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Image Include="Assets\Logo.png" />
+    <Image Include="Assets\shulk.dds" />
     <Image Include="Assets\SmallLogo.png" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Asteroid.h" />
-    <ClInclude Include="Beam.h" />
-    <ClInclude Include="GameEntity.h" />
-    <ClInclude Include="PickUP.h" />
+    <ClInclude Include="Content\Game Entity\Asteroid.h" />
+    <ClInclude Include="Content\Game Entity\Beam.h" />
+    <ClInclude Include="Content\Game Entity\Enemy.h" />
+    <ClInclude Include="Content\Game Entity\GameEntity.h" />
+    <ClInclude Include="Content\Game Entity\PickUP.h" />
+    <ClInclude Include="Content\Game Entity\SpaceShip.h" />
     <ClInclude Include="Helpers\InputManager.h" />
     <ClInclude Include="Helpers\OverlayManager.h" />
     <ClInclude Include="Helpers\SoundPlayer.h" />
@@ -207,12 +210,14 @@
     <ClInclude Include="Content\ShaderStructures.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SpaceShip.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Asteroid.cpp" />
-    <ClCompile Include="Beam.cpp" />
-    <ClCompile Include="GameEntity.cpp" />
+    <ClCompile Include="Content\Game Entity\Asteroid.cpp" />
+    <ClCompile Include="Content\Game Entity\Beam.cpp" />
+    <ClCompile Include="Content\Game Entity\Enemy.cpp" />
+    <ClCompile Include="Content\Game Entity\GameEntity.cpp" />
+    <ClCompile Include="Content\Game Entity\PickUp.cpp" />
+    <ClCompile Include="Content\Game Entity\SpaceShip.cpp" />
     <ClCompile Include="Helpers\InputManager.cpp" />
     <ClCompile Include="Helpers\OverlayManager.cpp" />
     <ClCompile Include="Helpers\SoundPlayer.cpp" />
@@ -230,8 +235,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PickUp.cpp" />
-    <ClCompile Include="SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
