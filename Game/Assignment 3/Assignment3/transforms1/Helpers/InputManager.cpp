@@ -1392,6 +1392,16 @@ void InputManager::TranslateKeyboardToPlayerActionsMap()
 
 			AddPlayerActionToMap(playerInput);
 		}
+		if (m_pKeyboardActions->find((unsigned int)VirtualKey::V) != m_pKeyboardActions->end()) // found
+		{
+			PlayerInputData * playerInput = new PlayerInputData();
+
+			playerInput->ID = DEFAULT_KEYBOARD_PLAYER_ID;
+			playerInput->PlayerAction = PLAYER_ACTION_TYPES::INPUT_CAMERA_SWAP;
+
+			AddPlayerActionToMap(playerInput);
+		}
+
 
         // NOTE: Add if statements here for other keys. Diagonals can be processed by checking for two keypresses
         // (e.g. Up + Right) and setting the X and Y properties of the PlayerInputData accordingly

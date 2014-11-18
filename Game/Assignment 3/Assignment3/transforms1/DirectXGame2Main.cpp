@@ -219,6 +219,8 @@ void DirectXGame2Main::ProcessInput(std::vector<PlayerInputData>* playerActions)
 			m_sceneRenderer->CameraMove(playerAction.X, playerAction.Y);
 			m_sceneRenderer->BurnFuel();
 			break;
+		case PLAYER_ACTION_TYPES::INPUT_CAMERA_SWAP:
+			m_sceneRenderer->SwapCamera();
         default:
             break;
         }

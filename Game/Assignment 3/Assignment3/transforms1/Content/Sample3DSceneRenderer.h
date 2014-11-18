@@ -13,6 +13,7 @@
 
 #include ".\Content\Game Entity\GameEntity.h"
 #include ".\Content\Game Entity\SpaceShip.h"
+#include ".\Content\Game Entity\Camera.h"
 #include ".\Content\Game Entity\Beam.h"
 #include ".\Content\Game Entity\Asteroid.h"
 #include ".\Content\Game Entity\PickUP.h"
@@ -43,6 +44,7 @@ namespace DirectXGame2
 		void CameraMove(float forr, float updown);
 		void FireBeam();
 		void BurnFuel();
+		void SwapCamera();
     private:
         void Rotate(float radians);
 		void DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
@@ -50,6 +52,7 @@ namespace DirectXGame2
 		void CreateLootBoxes();
 		void CreateEnemyBases();
 		void CreateCamera(); 
+		void CreateShip();
 		void CollisionDetection(); 
 		void CreateBaseCube();
 		void CreateScreenFlash();
@@ -84,6 +87,7 @@ namespace DirectXGame2
 
 		// Variables for player
 		SpaceShip ship;
+		Camera cam;
 
 		Asteroid aField[1500];
 
@@ -120,6 +124,7 @@ namespace DirectXGame2
 		int upgrades = 0;
 		int cameraMode = 0;
 		bool gameOver = FALSE; 
+		int swaptime = 0;
 
     };
 }

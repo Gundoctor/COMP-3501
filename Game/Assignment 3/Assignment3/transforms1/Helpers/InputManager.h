@@ -62,6 +62,7 @@ namespace DirectXGame2
         INPUT_CANCEL,
         INPUT_EXIT,
         INPUT_DIRECTIONAL,
+		INPUT_CAMERA_SWAP,
         // ...
         // Note to developer: Add the input events your game demands!
         // ...

@@ -31,9 +31,16 @@ m_deviceResources(deviceResources)
 	CreateLootBoxes();
 	CreateEnemyBases();
 	CreateCamera();
+	CreateShip();
 }
 
 void Sample3DSceneRenderer::CreateCamera() // this is bad, we need a seperate camera if we want to be able to go third person or is another camera just a xform farther back along z?
+{
+	cam.setPos(XMVectorSet(0, 0, 0, 0));
+	cam.setOri(XMQuaternionRotationRollPitchYaw(0, 0, 0));
+}
+
+void Sample3DSceneRenderer::CreateShip()
 {
 	ship.setPos(XMVectorSet(0, 0, 0, 0));
 	ship.setOri(XMQuaternionRotationRollPitchYaw(0, 0, 0));
@@ -48,12 +55,24 @@ void Sample3DSceneRenderer::CameraMove(float ahead, float updown)
 	*/
 
 	ship.CameraMove(ahead, updown);
+	cam.setPos(ship.getPos());
+	cam.setOri(ship.getPos());
+	cam.setFor(ship.getForward());
+	cam.setUp(ship.getUp());
+	if (cameraMode == 1)
+		cam.CameraMove(-50, 0);
 }
 
 void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
 {
 
 	ship.CameraSpin(roll, pitch, yaw);
+	cam.setPos(ship.getPos());
+	cam.setOri(ship.getPos());
+	cam.setFor(ship.getForward());
+	cam.setUp(ship.getUp());
+	if (cameraMode == 1)
+		cam.CameraMove(-50, 0);
 }
 
 // Initializes view parameters when the window size changes.
@@ -453,9 +472,15 @@ void Sample3DSceneRenderer::UpdatePlayer(DX::StepTimer const& timer)
 	CheckGameOver();
 
 	ship.Update(timer);
+	cam.setPos(ship.getPos());
+	cam.setOri(ship.getPos());
+	cam.setFor(ship.getForward());
+	cam.setUp(ship.getUp());
+	if (cameraMode == 1)
+		cam.CameraMove(-50, 0);
 
 	// remake view matrix, store in constant buffer data
-	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookToRH(ship.getPos(), ship.getForward(), ship.getUp())));
+	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp())));
 	// constant buffer data is headed to card on per-object basis, so no need to reset here
 }
 
@@ -475,6 +500,9 @@ void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
 		}
 
 	}
+	//enable camera swapping again.
+	if (swaptime >= 0)
+		swaptime--;
 
 	//no rotation for loot boxes for now. 
 }
@@ -629,6 +657,19 @@ void Sample3DSceneRenderer::BurnFuel()
 
 }
 
+//Called from DirectXGame2Main.cpp when V is pressed.
+void Sample3DSceneRenderer::SwapCamera()
+{
+	if (swaptime <= 0)
+	{
+		if (cameraMode == 0)
+			cameraMode = 1;
+		else
+			cameraMode = 0;
+		swaptime = 5;
+	}
+}
+
 void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
 {
 	XMMATRIX thexform;
@@ -751,7 +792,7 @@ void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
 	XMMATRIX thexform;
 	XMVECTOR L, camcpy;
 
-	camcpy = ship.getPos();
+	camcpy = cam.getPos();
 
 	//left bar
 	thexform = XMMatrixTranslationFromVector(XMVectorAdd(camcpy, XMVectorScale(ship.getForward(), 6.0)));

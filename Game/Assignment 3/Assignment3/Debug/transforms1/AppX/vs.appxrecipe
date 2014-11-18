@@ -6,12 +6,12 @@
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <SolutionConfiguration>Debug|Win32</SolutionConfiguration>
     <PackageArchitecture>x86</PackageArchitecture>
-    <PackageIdentityName>sotiredofdoinfthis</PackageIdentityName>
+    <PackageIdentityName>hjasehkfgafghauofgah</PackageIdentityName>
     <IntermediateOutputPath>C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Debug\</IntermediateOutputPath>
-    <RegisteredManifestChecksum>9C799F7600B7B79E6B7C34F8BCC169551E8F8AA21628E9E1840D201184FE7229</RegisteredManifestChecksum>
-    <RegisteredPackageMoniker>sotiredofdoinfthis_1.0.0.0_x86__qzqnngmhcfd2t</RegisteredPackageMoniker>
-    <RegisteredUserModeAppID>sotiredofdoinfthis_qzqnngmhcfd2t!App</RegisteredUserModeAppID>
-    <RegisteredPackageID>sotiredofdoinfthis</RegisteredPackageID>
+    <RegisteredManifestChecksum>BDD122791421FCD0E660BF3269FEAAE522847A8F80FBCF507B0A82F333570E50</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>hjasehkfgafghauofgah_1.0.0.0_x86__qzqnngmhcfd2t</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>hjasehkfgafghauofgah_qzqnngmhcfd2t!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>hjasehkfgafghauofgah</RegisteredPackageID>
     <RegisteredPackagePublisher>CN=mould</RegisteredPackagePublisher>
     <RegisteredVersion>1.0.0.0</RegisteredVersion>
     <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
@@ -20,13 +20,13 @@
     <AppXManifest Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-11-18T16:31:09.413</Modified>
+      <Modified>2014-11-18T18:10:39.467</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe">
       <PackagePath>Assignment3.exe</PackagePath>
-      <Modified>2014-11-18T17:30:06.922</Modified>
+      <Modified>2014-11-18T18:52:12.640</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd">
       <PackagePath>transforms1.winmd</PackagePath>
@@ -74,7 +74,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2014-11-18T16:30:38.017</Modified>
+      <Modified>2014-11-18T18:10:18.057</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>
