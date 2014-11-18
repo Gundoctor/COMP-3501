@@ -42,6 +42,7 @@ namespace DirectXGame2
 		void CameraSpin(float roll, float pitch, float yaw);
 		void CameraMove(float forr, float updown);
 		void FireBeam();
+		void BurnFuel();
     private:
         void Rotate(float radians);
 		void DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
@@ -57,6 +58,8 @@ namespace DirectXGame2
 		void ManageBeamFire(ID3D11DeviceContext2 *context);
 		void ManageTargetReticle(ID3D11DeviceContext2 *context);
 		void ManageEnemies(ID3D11DeviceContext2 *context);
+		void CheckGameOver();
+		
     private:
         // Cached pointer to device resources.
         std::shared_ptr<DX::DeviceResources> m_deviceResources;
@@ -84,7 +87,9 @@ namespace DirectXGame2
 
 		Asteroid aField[1500];
 
-		PickUp lootBoxes[300];
+		PickUp scrapBoxes[200];
+		PickUp fuelBoxes[500];
+		PickUp upgradeBoxes[50];
 
 		//all this stuff will be changed later
 		Enemy enemies[10];
@@ -99,7 +104,7 @@ namespace DirectXGame2
 		int enemyLaunchCount = 80;
 		int currEnemyNum = 0;
 
-		int numast, numBoxes;
+		int numast, numScrap, numFuel,numUp;
 		float lootRad = 0.5;
 		float astRad = 1.0;
 		float eRad = 1.0;
@@ -107,7 +112,14 @@ namespace DirectXGame2
 		float baseRad = 3.0;
 		float shipRad = 0.5;
 		float screenFlash = 0.0;
-		int score = 0;
+		int score = 0;		
+		int fuelMax = 1000;
+		int fuel = fuelMax;		
+		int healthMax = 10;
+		int health = healthMax;
+		int upgrades = 0;
+		int cameraMode = 0;
+		bool gameOver = FALSE; 
 
     };
 }

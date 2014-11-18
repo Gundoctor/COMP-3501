@@ -7,7 +7,7 @@
 
     For more information on package manifest files, see http://go.microsoft.com/fwlink/?LinkID=241727
   -->
-  <Identity Name="13fc1b43-60b1-4d90-814f-be1059f87493" Publisher="CN=mould" Version="1.0.0.0" ProcessorArchitecture="x86" />
+  <Identity Name="sotiredofdoinfthis" Publisher="CN=mould" Version="1.0.0.0" ProcessorArchitecture="x86" />
   <Properties>
     <DisplayName>DirectXGame2</DisplayName>
     <PublisherDisplayName>mould</PublisherDisplayName>

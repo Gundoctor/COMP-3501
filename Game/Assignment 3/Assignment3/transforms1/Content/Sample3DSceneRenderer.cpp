@@ -33,7 +33,7 @@ m_deviceResources(deviceResources)
 	CreateCamera();
 }
 
-void Sample3DSceneRenderer::CreateCamera()
+void Sample3DSceneRenderer::CreateCamera() // this is bad, we need a seperate camera if we want to be able to go third person or is another camera just a xform farther back along z?
 {
 	ship.setPos(XMVectorSet(0, 0, 0, 0));
 	ship.setOri(XMQuaternionRotationRollPitchYaw(0, 0, 0));
@@ -125,18 +125,40 @@ void Sample3DSceneRenderer::CreateAsteroidField()
 
 void Sample3DSceneRenderer::CreateLootBoxes()
 {
-	numBoxes = 300;
+	numScrap = sizeof(scrapBoxes)/sizeof(scrapBoxes[0]);
+	numFuel = sizeof(fuelBoxes) / sizeof(fuelBoxes[0]);
+	numUp = sizeof(upgradeBoxes) / sizeof(upgradeBoxes[0]);
 	XMVECTOR angles;
 
-	for (int i = 0; i < numBoxes; i++)
+	for (int i = 0; i < numScrap; i++)
 	{
 		angles = XMVectorSet(3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 1.0f);
-		lootBoxes[i].setPos(XMVectorSet(600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 1.0f));
-		lootBoxes[i].setOri(XMQuaternionRotationRollPitchYawFromVector(angles));
+		scrapBoxes[i].setPos(XMVectorSet(600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 1.0f));
+		scrapBoxes[i].setOri(XMQuaternionRotationRollPitchYawFromVector(angles));
 		angles = XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f);
 
-		lootBoxes[i].setL(XMQuaternionRotationRollPitchYawFromVector(angles));
+		scrapBoxes[i].setL(XMQuaternionRotationRollPitchYawFromVector(angles));
 	}
+
+	for (int i = 0; i < numFuel; i++)
+	{
+		angles = XMVectorSet(3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 1.0f);
+		scrapBoxes[i].setPos(XMVectorSet(600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 1.0f));
+		scrapBoxes[i].setOri(XMQuaternionRotationRollPitchYawFromVector(angles));
+		angles = XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f);
+
+		scrapBoxes[i].setL(XMQuaternionRotationRollPitchYawFromVector(angles));
+	}
+	for (int i = 0; i < numUp; i++)
+	{
+		angles = XMVectorSet(3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 1.0f);
+		scrapBoxes[i].setPos(XMVectorSet(600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 1.0f));
+		scrapBoxes[i].setOri(XMQuaternionRotationRollPitchYawFromVector(angles));
+		angles = XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f);
+
+		scrapBoxes[i].setL(XMQuaternionRotationRollPitchYawFromVector(angles));
+	}
+
 }
 
 void Sample3DSceneRenderer::CreateEnemyBases()
@@ -224,27 +246,77 @@ void Sample3DSceneRenderer::CollisionDetection()
 		{
 			ship.setIsHit(true);
 			ship.setIsHit2(true);
+			health--;
 		}
 	}
 
 	//check to see if we hit a loot box
-	for (int i = 0; i < numBoxes; i++)
+	for (int i = 0; i < numScrap; i++)
 	{
 		XMFLOAT4 camPos, lootPos;
 		XMStoreFloat4(&camPos, ship.getPos());
-		XMStoreFloat4(&lootPos, lootBoxes[i].getPos());
+		XMStoreFloat4(&lootPos, scrapBoxes[i].getPos());
 
 		float dx = camPos.x - lootPos.x;
 		float dy = camPos.y - lootPos.y;
 		float dz = camPos.z - lootPos.z;
 		float length = sqrt(dx*dx + dy*dy + dz*dz);
 
-		if (fabs(length) < lootRad + shipRad && !lootBoxes[i].getShouldBeDel())
+		if (fabs(length) < lootRad + shipRad && !scrapBoxes[i].getShouldBeDel())
 		{
 			score += 100;
-			lootBoxes[i].setShouldBeDel(true);
+			if (health < healthMax)
+			{
+				health++;
+			}
+			scrapBoxes[i].setShouldBeDel(true);
 		}
 	}
+	for (int i = 0; i < numFuel; i++)
+	{
+		XMFLOAT4 camPos, lootPos;
+		XMStoreFloat4(&camPos, ship.getPos());
+		XMStoreFloat4(&lootPos, fuelBoxes[i].getPos());
+
+		float dx = camPos.x - lootPos.x;
+		float dy = camPos.y - lootPos.y;
+		float dz = camPos.z - lootPos.z;
+		float length = sqrt(dx*dx + dy*dy + dz*dz);
+
+		if (fabs(length) < lootRad + shipRad && !fuelBoxes[i].getShouldBeDel())
+		{
+			score += 100;
+			if (fuel < fuelMax)
+			{
+				fuel+=10;
+				if (fuel > fuelMax)
+				{
+					fuel = fuelMax;
+				}
+			}
+			fuelBoxes[i].setShouldBeDel(true);
+		}
+	}
+	for (int i = 0; i < numUp; i++)
+	{
+		XMFLOAT4 camPos, lootPos;
+		XMStoreFloat4(&camPos, ship.getPos());
+		XMStoreFloat4(&lootPos, upgradeBoxes[i].getPos());
+
+		float dx = camPos.x - lootPos.x;
+		float dy = camPos.y - lootPos.y;
+		float dz = camPos.z - lootPos.z;
+		float length = sqrt(dx*dx + dy*dy + dz*dz);
+
+		if (fabs(length) < lootRad + shipRad && !upgradeBoxes[i].getShouldBeDel())
+		{
+			score += 100;
+			upgrades++;
+			upgradeBoxes[i].setShouldBeDel(true);
+		}
+	}
+
+
 
 
 	XMFLOAT4 camPos, basePos;
@@ -289,6 +361,7 @@ void Sample3DSceneRenderer::CollisionDetection()
 				enemies[i].setShouldBeDel(true);
 				ship.setIsHit(true);
 				ship.setIsHit2(true);
+ 				health--;
 			}
 		}
 	}
@@ -377,6 +450,7 @@ void Sample3DSceneRenderer::StopTracking()
 void Sample3DSceneRenderer::UpdatePlayer(DX::StepTimer const& timer)
 {
 	CollisionDetection();
+	CheckGameOver();
 
 	ship.Update(timer);
 
@@ -503,13 +577,34 @@ void Sample3DSceneRenderer::Render()
 			DrawOne(context, &thexform);
 		}
 	}
-	for (int i = 0; i < numBoxes; i++)
-	{ // draw every lootBox
+	// draw every lootBox
+	for (int i = 0; i < numScrap; i++)
+	{ 
 		//draw not "destroyed" lootBoxes
-		if (!lootBoxes[i].getShouldBeDel())
+		if (!scrapBoxes[i].getShouldBeDel())
 		{
-			thexform = XMMatrixRotationQuaternion(lootBoxes[i].getOri());
-			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(lootBoxes[i].getPos()));
+			thexform = XMMatrixRotationQuaternion(scrapBoxes[i].getOri());
+			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(scrapBoxes[i].getPos()));
+			DrawOne(context, &thexform);
+		}
+	}
+	for (int i = 0; i < numFuel; i++)
+	{
+		//draw not "destroyed" lootBoxes
+		if (!fuelBoxes[i].getShouldBeDel())
+		{
+			thexform = XMMatrixRotationQuaternion(fuelBoxes[i].getOri());
+			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(fuelBoxes[i].getPos()));
+			DrawOne(context, &thexform);
+		}
+	}
+	for (int i = 0; i < numUp; i++)
+	{
+		//draw not "destroyed" lootBoxes
+		if (!upgradeBoxes[i].getShouldBeDel())
+		{
+			thexform = XMMatrixRotationQuaternion(upgradeBoxes[i].getOri());
+			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(upgradeBoxes[i].getPos()));
 			DrawOne(context, &thexform);
 		}
 	}
@@ -525,6 +620,13 @@ void Sample3DSceneRenderer::Render()
 void Sample3DSceneRenderer::FireBeam()
 {
 	ship.FireBeam();
+}
+
+//Called from DirectXGame2Main.cpp when movement buttons are pressed.
+void Sample3DSceneRenderer::BurnFuel()
+{
+	fuel--;
+
 }
 
 void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
@@ -819,6 +921,13 @@ void Sample3DSceneRenderer::CreateTargetReticle()
 		);
 }
 
+void Sample3DSceneRenderer::CheckGameOver(){
+	if (health <= 0)
+		gameOver = TRUE;
+	else if (fuel <= 0)
+		gameOver = TRUE;
+		
+}
 
 void Sample3DSceneRenderer::CreateBaseCube() {
 

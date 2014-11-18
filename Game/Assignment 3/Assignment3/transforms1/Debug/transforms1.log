@@ -1,10 +1,7 @@
-﻿Build started 11/11/2014 11:21:49 PM.
-     1>Project "D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\transforms1.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         D:\Programs\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\\" /IDebug\ /I"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\\" /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _DEBUG /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\pch.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /wd4453 /wd28204 /FU"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.VCLibs\12.0\References\CommonConfiguration\neutral\platform.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /FU"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd" /analyze- /errorReport:prompt /bigobj "Content\Game Entity\Enemy.cpp"
-         Enemy.cpp
-       Link:
-         D:\Programs\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:\Programs\Microsoft Visual Studio 12.0\VC\\lib\store" /LIBPATH:"D:\Programs\Microsoft Visual Studio 12.0\VC\\lib" d2d1.lib d3d11.lib dxgi.lib ole32.lib windowscodecs.lib dwrite.lib xaudio2.lib mfcore.lib mfplat.lib mfreadwrite.lib xinput.lib mfuuid.lib kernel32.lib /MANIFEST:NO /DEBUG /PDB:"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD /WINMDFILE:"D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\Assignment3.res
+﻿Build started 11/18/2014 12:30:06 PM.
+     1>Project "C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\transforms1.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\\lib\store" /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\\lib" d2d1.lib d3d11.lib dxgi.lib ole32.lib windowscodecs.lib dwrite.lib xaudio2.lib mfcore.lib mfplat.lib mfreadwrite.lib xinput.lib mfuuid.lib kernel32.lib /MANIFEST:NO /DEBUG /PDB:"C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /APPCONTAINER /WINMD /WINMDFILE:"C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\Assignment3.res
          Debug\Asteroid.obj
          Debug\Beam.obj
          Debug\Enemy.obj
@@ -21,9 +18,9 @@
          Debug\SampleDebugTextRenderer.obj
          Debug\SampleVirtualControllerRenderer.obj
          Debug\pch.obj
-         transforms1.vcxproj -> D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe
-     1>Done Building Project "D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\transforms1.vcxproj" (Build target(s)).
+         transforms1.vcxproj -> C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe
+     1>Done Building Project "C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\transforms1.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.80
+Time Elapsed 00:00:00.85

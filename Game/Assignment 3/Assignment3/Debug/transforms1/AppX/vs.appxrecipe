@@ -1,80 +1,80 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Machine>YUGO-PC</Machine>
-    <WindowsUser>Yugo</WindowsUser>
+    <Machine>WIN8-5151-05</Machine>
+    <WindowsUser>conradcameron</WindowsUser>
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <SolutionConfiguration>Debug|Win32</SolutionConfiguration>
     <PackageArchitecture>x86</PackageArchitecture>
-    <PackageIdentityName>13fc1b43-60b1-4d90-814f-be1059f87493</PackageIdentityName>
-    <IntermediateOutputPath>D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Debug\</IntermediateOutputPath>
-    <RegisteredManifestChecksum>7D342F6FB1C71EB2E1D382BBA3D8280218DB6E8EF00DF487A5773644319A87E6</RegisteredManifestChecksum>
-    <RegisteredPackageMoniker>13fc1b43-60b1-4d90-814f-be1059f87493_1.0.0.0_x86__qzqnngmhcfd2t</RegisteredPackageMoniker>
-    <RegisteredUserModeAppID>13fc1b43-60b1-4d90-814f-be1059f87493_qzqnngmhcfd2t!App</RegisteredUserModeAppID>
-    <RegisteredPackageID>13fc1b43-60b1-4d90-814f-be1059f87493</RegisteredPackageID>
+    <PackageIdentityName>sotiredofdoinfthis</PackageIdentityName>
+    <IntermediateOutputPath>C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Debug\</IntermediateOutputPath>
+    <RegisteredManifestChecksum>9C799F7600B7B79E6B7C34F8BCC169551E8F8AA21628E9E1840D201184FE7229</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>sotiredofdoinfthis_1.0.0.0_x86__qzqnngmhcfd2t</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>sotiredofdoinfthis_qzqnngmhcfd2t!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>sotiredofdoinfthis</RegisteredPackageID>
     <RegisteredPackagePublisher>CN=mould</RegisteredPackagePublisher>
     <RegisteredVersion>1.0.0.0</RegisteredVersion>
     <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\AppxManifest.xml">
+    <AppXManifest Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-11-10T22:04:41.035</Modified>
+      <Modified>2014-11-18T16:31:09.413</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\Assignment3.exe">
       <PackagePath>Assignment3.exe</PackagePath>
-      <Modified>2014-11-12T04:21:50.182</Modified>
+      <Modified>2014-11-18T17:30:06.922</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd">
       <PackagePath>transforms1.winmd</PackagePath>
-      <Modified>2014-11-03T20:33:09.590</Modified>
+      <Modified>2014-11-18T16:28:40.293</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Logo.png">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Logo.png">
       <PackagePath>Assets\Logo.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-09-20T15:07:40.000</Modified>
+      <Modified>2014-11-18T16:28:41.029</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\SmallLogo.png">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\SmallLogo.png">
       <PackagePath>Assets\SmallLogo.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-09-20T15:07:40.000</Modified>
+      <Modified>2014-11-18T16:28:41.029</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\StoreLogo.png">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\StoreLogo.png">
       <PackagePath>Assets\StoreLogo.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-09-20T15:07:40.000</Modified>
+      <Modified>2014-11-18T16:28:41.046</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\SplashScreen.png">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\SplashScreen.png">
       <PackagePath>Assets\SplashScreen.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-09-20T15:07:40.000</Modified>
+      <Modified>2014-11-18T16:28:41.030</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\shulk.dds">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\shulk.dds">
       <PackagePath>Assets\shulk.dds</PackagePath>
-      <Modified>2014-10-18T20:05:29.284</Modified>
+      <Modified>2014-11-18T16:28:41.070</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\becky.wma">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\becky.wma">
       <PackagePath>Assets\becky.wma</PackagePath>
-      <Modified>2014-09-20T15:07:40.000</Modified>
+      <Modified>2014-11-18T16:28:41.059</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\chord.wav">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\chord.wav">
       <PackagePath>Assets\chord.wav</PackagePath>
-      <Modified>2014-09-20T15:07:40.000</Modified>
+      <Modified>2014-11-18T16:28:41.061</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\SamplePixelShader.cso">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\SamplePixelShader.cso">
       <PackagePath>SamplePixelShader.cso</PackagePath>
-      <Modified>2014-11-04T03:54:26.389</Modified>
+      <Modified>2014-11-18T16:30:28.997</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\SampleVertexShader.cso">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\SampleVertexShader.cso">
       <PackagePath>SampleVertexShader.cso</PackagePath>
-      <Modified>2014-11-04T03:54:26.428</Modified>
+      <Modified>2014-11-18T16:30:29.075</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\resources.pri">
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2014-11-10T22:04:40.944</Modified>
+      <Modified>2014-11-18T16:30:38.017</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

@@ -217,6 +217,7 @@ void DirectXGame2Main::ProcessInput(std::vector<PlayerInputData>* playerActions)
 		case PLAYER_ACTION_TYPES::INPUT_MOVE:
 			m_sceneRenderer->CameraSpin(playerAction.Roll, playerAction.Pitch, playerAction.Yaw);
 			m_sceneRenderer->CameraMove(playerAction.X, playerAction.Y);
+			m_sceneRenderer->BurnFuel();
 			break;
         default:
             break;
