@@ -10,6 +10,7 @@
 #include "..\Helpers\DeviceResources.h"
 #include "ShaderStructures.h"
 #include "..\Helpers\StepTimer.h"
+#include "..\..\DirectXTK\Inc\Model.h"
 
 #include ".\Content\Game Entity\GameEntity.h"
 #include ".\Content\Game Entity\SpaceShip.h"
@@ -79,6 +80,9 @@ namespace DirectXGame2
         ModelViewProjectionConstantBuffer    m_constantBufferData;
         uint32    m_indexCount;
 
+		//for models
+		std::unique_ptr<DirectX::Model> healthbox;
+
         // Variables used with the rendering loop.
         bool    m_loadingComplete;
 		bool	m_contextReady;
@@ -88,6 +92,10 @@ namespace DirectXGame2
 		// Variables for player
 		SpaceShip ship;
 		Camera cam;
+
+		//keep track of screen size. needed to compute projection matrix to draw models.
+		float aspectRatio;
+		float fovAngleY;
 
 		Asteroid aField[1500];
 

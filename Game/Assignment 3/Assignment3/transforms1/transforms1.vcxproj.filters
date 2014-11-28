@@ -150,7 +150,9 @@
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectXGame2_TemporaryKey.pfx" />
+    <None Include="Assets\Crate Box\crate.mtl">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assignment3.rc" />
@@ -159,5 +161,25 @@
     <Image Include="Assets\shulk.dds">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Assets\Crate Box\Texture\crate_tex.jpg">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Crate Box\Texture\crate_tex2.jpg">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Crate Box\Texture\crate_tex3.jpg">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Crate Box\Texture\crate_tex4.jpg">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <MeshContentTask Include="Scene.fbx">
+      <Filter>Assets</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\Crate Box\crate.obj">
+      <Filter>Assets</Filter>
+    </MeshContentTask>
   </ItemGroup>
 </Project>

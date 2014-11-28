@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Machine>WIN8-5151-05</Machine>
+    <Machine>WIN8-5151-06</Machine>
     <WindowsUser>conradcameron</WindowsUser>
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <SolutionConfiguration>Debug|Win32</SolutionConfiguration>
     <PackageArchitecture>x86</PackageArchitecture>
-    <PackageIdentityName>hjasehkfgafghauofgah</PackageIdentityName>
+    <PackageIdentityName>hrsdfghsdsgsfhdh</PackageIdentityName>
     <IntermediateOutputPath>C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -21,6 +21,18 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\transforms1.winmd">
       <PackagePath>transforms1.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Crate Box\Texture\crate_tex.jpg">
+      <PackagePath>Assets\Crate Box\Texture\crate_tex.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Crate Box\Texture\crate_tex2.jpg">
+      <PackagePath>Assets\Crate Box\Texture\crate_tex2.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Crate Box\Texture\crate_tex3.jpg">
+      <PackagePath>Assets\Crate Box\Texture\crate_tex3.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Crate Box\Texture\crate_tex4.jpg">
+      <PackagePath>Assets\Crate Box\Texture\crate_tex4.jpg</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\Logo.png">
       <PackagePath>Assets\Logo.png</PackagePath>
@@ -41,6 +53,9 @@
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\shulk.dds">
       <PackagePath>Assets\shulk.dds</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\USERS\CONRADCAMERON\DESKTOP\COMP-3501\GAME\ASSIGNMENT 3\ASSIGNMENT3\DEBUG\TRANSFORMS1\_USERS_CONRADCAMERON_DESKTOP_COMP-3501_GAME_ASSIGNMENT 3_ASSIGNMENT3_TRANSFORMS1_ASSETS_CRATE BOX_TEXTURE_CRATE__TEX2.JPG.DDS">
+      <PackagePath>_USERS_CONRADCAMERON_DESKTOP_COMP-3501_GAME_ASSIGNMENT 3_ASSIGNMENT3_TRANSFORMS1_ASSETS_CRATE BOX_TEXTURE_CRATE__TEX2.JPG.DDS</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\transforms1\Assets\becky.wma">
       <PackagePath>Assets\becky.wma</PackagePath>
     </AppxPackagedFile>
@@ -52,6 +67,18 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\SampleVertexShader.cso">
       <PackagePath>SampleVertexShader.cso</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\USERS\CONRADCAMERON\DESKTOP\COMP-3501\GAME\ASSIGNMENT 3\ASSIGNMENT3\DEBUG\TRANSFORMS1\_PROGRAM FILES %28X86%29_MICROSOFT VISUAL STUDIO 12.0_COMMON7_IDE_EXTENSIONS_MICROSOFT_VSGRAPHICS_ASSETS_EFFECTS_LAMBERT.DGSL.CSO">
+      <PackagePath>_PROGRAM FILES %28X86%29_MICROSOFT VISUAL STUDIO 12.0_COMMON7_IDE_EXTENSIONS_MICROSOFT_VSGRAPHICS_ASSETS_EFFECTS_LAMBERT.DGSL.CSO</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\USERS\CONRADCAMERON\DESKTOP\COMP-3501\GAME\ASSIGNMENT 3\ASSIGNMENT3\DEBUG\TRANSFORMS1\_PROGRAM FILES %28X86%29_MICROSOFT VISUAL STUDIO 12.0_COMMON7_IDE_EXTENSIONS_MICROSOFT_VSGRAPHICS_ASSETS_EFFECTS_PHONG.DGSL.CSO">
+      <PackagePath>_PROGRAM FILES %28X86%29_MICROSOFT VISUAL STUDIO 12.0_COMMON7_IDE_EXTENSIONS_MICROSOFT_VSGRAPHICS_ASSETS_EFFECTS_PHONG.DGSL.CSO</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\USERS\CONRADCAMERON\DESKTOP\COMP-3501\GAME\ASSIGNMENT 3\ASSIGNMENT3\DEBUG\TRANSFORMS1\SCENE.CMO">
+      <PackagePath>SCENE.CMO</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\USERS\CONRADCAMERON\DESKTOP\COMP-3501\GAME\ASSIGNMENT 3\ASSIGNMENT3\DEBUG\TRANSFORMS1\CRATE.CMO">
+      <PackagePath>CRATE.CMO</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\conradcameron\Desktop\COMP-3501\Game\Assignment 3\Assignment3\Debug\transforms1\resources.pri">
       <PackagePath>resources.pri</PackagePath>

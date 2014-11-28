@@ -10,6 +10,10 @@
 #include <math.h>
 
 #include "..\Helpers\DirectXHelper.h"
+#include "..\..\DirectXTK\Inc\DDSTextureLoader.h"
+#include "..\..\DirectXTK\Inc\Model.h"
+#include "..\..\DirectXTK\Inc\Effects.h"
+#include "..\..\DirectXTK\Inc\CommonStates.h"
 
 using namespace DirectXGame2;
 
@@ -79,8 +83,8 @@ void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
 void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 {
     Size outputSize = m_deviceResources->GetOutputSize();
-    float aspectRatio = outputSize.Width / outputSize.Height;
-    float fovAngleY = 70.0f * XM_PI / 180.0f;
+    aspectRatio = outputSize.Width / outputSize.Height;
+    fovAngleY = 70.0f * XM_PI / 180.0f;
 
     // This is a simple example of change that can be made when the app is in
     // portrait or snapped view.
@@ -520,6 +524,7 @@ void Sample3DSceneRenderer::Render()
 	}
 
 	auto context = m_deviceResources->GetD3DDeviceContext();
+	CommonStates states(m_deviceResources->GetD3DDevice());
 
     // Set render targets to the screen.
     ID3D11RenderTargetView *const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
@@ -579,6 +584,16 @@ void Sample3DSceneRenderer::Render()
 
 
 	XMMATRIX thexform;
+	XMMATRIX local;
+	XMMATRIX view;
+	XMMATRIX proj;
+
+	proj = XMMatrixPerspectiveFovRH(
+		fovAngleY,
+		aspectRatio,
+		0.1f,
+		1000.0f
+		);
 
 	ManageScreenFlash(context);
 	ManageEnemies(context);
@@ -602,18 +617,24 @@ void Sample3DSceneRenderer::Render()
 		{
 			thexform = XMMatrixRotationQuaternion(aField[i].getOri());
 			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(aField[i].getPos()));
-			DrawOne(context, &thexform);
+			//DrawOne(context, &thexform);
+			local = thexform;
+			view = XMMatrixTranspose(XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp()));
+			
+			healthbox->Draw(context, states, local, view, proj);
+			
 		}
 	}
 	// draw every lootBox
 	for (int i = 0; i < numScrap; i++)
 	{ 
-		//draw not "destroyed" lootBoxes
+		//draw not "destroyed" health pickups
 		if (!scrapBoxes[i].getShouldBeDel())
 		{
 			thexform = XMMatrixRotationQuaternion(scrapBoxes[i].getOri());
 			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(scrapBoxes[i].getPos()));
 			DrawOne(context, &thexform);
+			
 		}
 	}
 	for (int i = 0; i < numFuel; i++)
@@ -792,7 +813,7 @@ void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
 	XMMATRIX thexform;
 	XMVECTOR L, camcpy;
 
-	camcpy = cam.getPos();
+	camcpy = ship.getPos();
 
 	//left bar
 	thexform = XMMatrixTranslationFromVector(XMVectorAdd(camcpy, XMVectorScale(ship.getForward(), 6.0)));
@@ -1284,6 +1305,9 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
                 )
             );
     });
+
+	DGSLEffectFactory fx(m_deviceResources->GetD3DDevice());
+	healthbox = Model::CreateFromCMO(m_deviceResources->GetD3DDevice(), L"Scene.cmo", fx);
 
     // Once both shaders are loaded, create the mesh.
 	auto createCubeTask = (createPSTask && createVSTask).then([this]() {
