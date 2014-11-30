@@ -23,6 +23,7 @@ namespace DirectXGame2{
 		XMVECTOR getForward();
 		XMVECTOR getUp();
 		XMVECTOR getLeft();
+		void setHitVector(XMVECTOR);
 		void setIsHit(bool);
 		void setIsHit2(bool);
 		bool getIsHit();
@@ -57,8 +58,9 @@ namespace DirectXGame2{
 		XMVECTOR forward;
 		XMVECTOR up;
 		XMVECTOR left; // player coordinate frame, rebuilt from orientation
+		XMVECTOR hitDir;
 
-		float shipVel;
+		float shipVel, hitVel;
 		bool isHit;
 		bool isHit2;
 		int stunTimer;

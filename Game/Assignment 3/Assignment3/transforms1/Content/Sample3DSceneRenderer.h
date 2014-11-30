@@ -116,13 +116,15 @@ namespace DirectXGame2
 		int enemyLaunchCount = 80;
 		int currEnemyNum = 0;
 
-		int numast, numScrap, numFuel,numUp;
+		int coldettccounter = 0;
+
+		int numast, numScrap, numFuel, numUp;
 		float lootRad = 0.5;
-		float astRad = 1.0;
+		float astRad = 2.0;
 		float eRad = 1.0;
 		float baseRange = 300;
 		float baseRad = 3.0;
-		float shipRad = 0.5;
+		float shipRad = 1.0;
 		float screenFlash = 0.0;
 		int score = 0;		
 		int fuelMax = 1000;

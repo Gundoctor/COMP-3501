@@ -39,15 +39,20 @@ void SpaceShip::Update(DX::StepTimer const& timer)
 
 	if (isHit)
 	{
-		shipVel -= 1;
+		hitVel = -1;
 		isHit = false;
 	}
-	else if (shipVel < 0)
+	else if (hitVel < 0)
 	{
-		shipVel += 0.1;
+		hitVel += 0.1;
+	}
+	else 
+	{
+		hitDir = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	pos = XMVectorAdd(pos, XMVectorScale(forward, shipVel));
+	pos = XMVectorAdd(pos, XMVectorScale(hitDir, hitVel));
 
 
 	ManageBeamFire();
@@ -167,6 +172,8 @@ void SpaceShip::ManageBeamFire() {
 
 	int newNumBeam = numBeam;
 
+	bool beamDel = false;
+
 	if (numBeam > 0)
 	{
 		//Move both beams to the end
@@ -183,18 +190,21 @@ void SpaceShip::ManageBeamFire() {
 
 				}
 				newNumBeam -= 1;
+				beamDel = true;
 			}
 		}
 	}
 
+	if (beamDel)
+	{
+		numBeam = newNumBeam;
+		Beam *temp = new Beam[numBeam];
 
-	numBeam = newNumBeam;
-	Beam *temp = new Beam[numBeam];
+		memcpy(temp, beams, numBeam*sizeof(Beam));
 
-	memcpy(temp, beams, numBeam*sizeof(Beam));
-
-	delete[] beams;
-	beams = temp;
+		delete[] beams;
+		beams = temp;
+	}
 }
 
 
@@ -213,6 +223,11 @@ XMVECTOR SpaceShip::getUp()
 XMVECTOR SpaceShip::getLeft()
 {
 	return left;
+}
+
+void SpaceShip::setHitVector(XMVECTOR dir)
+{
+	hitDir = dir;
 }
 
 void SpaceShip::setIsHit(bool hit)

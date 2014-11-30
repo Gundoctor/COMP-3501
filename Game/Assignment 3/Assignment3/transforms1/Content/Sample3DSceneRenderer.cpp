@@ -60,11 +60,11 @@ void Sample3DSceneRenderer::CameraMove(float ahead, float updown)
 
 	ship.CameraMove(ahead, updown);
 	cam.setPos(ship.getPos());
-	cam.setOri(ship.getPos());
+	cam.setOri(ship.getOri());
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-50, 0);
+		cam.CameraMove(-30, 0);
 }
 
 void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
@@ -72,11 +72,11 @@ void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
 
 	ship.CameraSpin(roll, pitch, yaw);
 	cam.setPos(ship.getPos());
-	cam.setOri(ship.getPos());
+	cam.setOri(ship.getOri());
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-50, 0);
+		cam.CameraMove(-30, 0);
 }
 
 // Initializes view parameters when the window size changes.
@@ -269,6 +269,7 @@ void Sample3DSceneRenderer::CollisionDetection()
 		{
 			ship.setIsHit(true);
 			ship.setIsHit2(true);
+			ship.setHitVector(XMVectorSubtract(aField[i].getPos(), ship.getPos()));
 			health--;
 		}
 	}
@@ -355,6 +356,7 @@ void Sample3DSceneRenderer::CollisionDetection()
 	{
 		ship.setIsHit(true);
 		ship.setIsHit2(true);
+		ship.setHitVector(XMVectorSubtract(eBasePos, ship.getPos()));
 	}
 
 	if (!isWithinRange)
@@ -384,6 +386,7 @@ void Sample3DSceneRenderer::CollisionDetection()
 				enemies[i].setShouldBeDel(true);
 				ship.setIsHit(true);
 				ship.setIsHit2(true);
+				ship.setHitVector(XMVectorSubtract(enemies[i].getPos(), ship.getPos()));
  				health--;
 			}
 		}
@@ -435,11 +438,11 @@ void Sample3DSceneRenderer::DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *the
 		0
 		);
 
-	context->VSSetConstantBuffers(
+	/*context->VSSetConstantBuffers(
 		0,
 		1,
 		m_constantBuffer.GetAddressOf()
-		);
+		);*/
 
 	// Draw the objects.
 	context->DrawIndexed(
@@ -473,15 +476,15 @@ void Sample3DSceneRenderer::StopTracking()
 void Sample3DSceneRenderer::UpdatePlayer(DX::StepTimer const& timer)
 {
 	CollisionDetection();
+
 	CheckGameOver();
 
 	ship.Update(timer);
 	cam.setPos(ship.getPos());
-	cam.setOri(ship.getPos());
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-50, 0);
+		cam.CameraMove(-30, 0);
 
 	// remake view matrix, store in constant buffer data
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp())));
@@ -502,7 +505,6 @@ void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
 		{
 			enemies[i].Update(timer);
 		}
-
 	}
 	//enable camera swapping again.
 	if (swaptime >= 0)
@@ -529,16 +531,6 @@ void Sample3DSceneRenderer::Render()
     // Set render targets to the screen.
     ID3D11RenderTargetView *const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
     context->OMSetRenderTargets(1, targets, m_deviceResources->GetDepthStencilView());
-
-    // Prepare the constant buffer to send it to the graphics device.
-	context->UpdateSubresource(
-		m_constantBuffer.Get(),
-		0,
-		NULL,
-		&m_constantBufferData,
-		0,
-		0
-		);
 
     // Each vertex is one instance of the VertexPositionColor struct.
     UINT stride = sizeof(VertexPositionColor);
@@ -568,13 +560,6 @@ void Sample3DSceneRenderer::Render()
         0
         );
 
-    // Send the constant buffer to the graphics device.
-	context->VSSetConstantBuffers(
-		0,
-		1,
-		m_constantBuffer.GetAddressOf()
-		);
-
     // Attach our pixel shader.
     context->PSSetShader(
         m_pixelShader.Get(),
@@ -595,10 +580,6 @@ void Sample3DSceneRenderer::Render()
 		1000.0f
 		);
 
-	ManageScreenFlash(context);
-	ManageEnemies(context);
-	ManageTargetReticle(context);
-
 	//Draw enemy base
 	thexform = XMMatrixRotationQuaternion(eBaseOri);
 	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBasePos));
@@ -617,14 +598,16 @@ void Sample3DSceneRenderer::Render()
 		{
 			thexform = XMMatrixRotationQuaternion(aField[i].getOri());
 			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(aField[i].getPos()));
-			//DrawOne(context, &thexform);
+			DrawOne(context, &thexform);
 			local = thexform;
-			view = XMMatrixTranspose(XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp()));
+			view = XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp());
 			
-			healthbox->Draw(context, states, local, view, proj);
+			//healthbox->Draw(context, states, local, view, proj);
 			
 		}
 	}
+	CreateBaseCube();
+
 	// draw every lootBox
 	for (int i = 0; i < numScrap; i++)
 	{ 
@@ -662,6 +645,11 @@ void Sample3DSceneRenderer::Render()
 	XMStoreFloat4(&camPos, ship.getPos());
 	
 	
+
+	ManageScreenFlash(context);
+	ManageEnemies(context);
+	ManageTargetReticle(context);
+
 	m_contextReady = true;
 }
 
@@ -722,7 +710,7 @@ void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
 				if (!enemies[i].getShouldBeDel())
 				{
 					//lazy way for now
-					XMVECTOR shipDir = ship.getPos() - enemies[i].getPos();
+					XMVECTOR shipDir = XMVectorSubtract(ship.getPos(), enemies[i].getPos());
 					shipDir = XMVector4Normalize(shipDir);
 
 					enemies[i].setForward(shipDir);
@@ -790,8 +778,8 @@ void Sample3DSceneRenderer::ManageScreenFlash(ID3D11DeviceContext2 *context)
 	else if (stunTimer < stunTime) {
 		stunTimer++;
 
-		thexform = XMMatrixRotationQuaternion(ship.getOri());
-		thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(XMVectorAdd(ship.getPos(), XMVectorScale(ship.getForward(), 1.0))));
+		thexform = XMMatrixRotationQuaternion(cam.getOri());
+		thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(XMVectorAdd(cam.getPos(), XMVectorScale(cam.getForward(), 1.0))));
 
 
 		thexform = XMMatrixMultiply(XMMatrixScaling(5, 5, 0.05), thexform);
@@ -803,7 +791,6 @@ void Sample3DSceneRenderer::ManageScreenFlash(ID3D11DeviceContext2 *context)
 	}
 
 	ship.setStunTimer(stunTimer);
-
 }
 
 void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
@@ -848,7 +835,6 @@ void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
 	
 	thexform = XMMatrixMultiply(XMMatrixScaling(0.625, 0.05, 0.05), thexform);
 	DrawOne(context, &thexform);
-
 }
 
 
@@ -920,8 +906,6 @@ void Sample3DSceneRenderer::CreateTargetReticle()
 		&m_indexBuffer
 		)
 		);
-
-
 
 
 	auto context = m_deviceResources->GetD3DDeviceContext();
@@ -1059,7 +1043,6 @@ void Sample3DSceneRenderer::CreateBaseCube() {
 		&m_indexBuffer
 		)
 		);
-
 
 
 	auto context = m_deviceResources->GetD3DDeviceContext();
