@@ -26,4 +26,12 @@ namespace DirectXGame2
         DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 color;
     };
+
+	struct InstanceType
+	{
+		DirectX::XMFLOAT3 pos;
+		//DirectX::XMFLOAT3 color;
+		//DirectX::XMFLOAT3 size;
+		//DirectX::XMFLOAT3 ori;
+	};
 }

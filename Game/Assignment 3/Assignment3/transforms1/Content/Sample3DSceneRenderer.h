@@ -49,6 +49,7 @@ namespace DirectXGame2
     private:
         void Rotate(float radians);
 		void DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
+		void DrawAsts(ID3D11DeviceContext2 *context, XMMATRIX *thexform);
 		void CreateAsteroidField();
 		void CreateLootBoxes();
 		void CreateEnemyBases();
@@ -76,9 +77,20 @@ namespace DirectXGame2
         Microsoft::WRL::ComPtr<ID3D11PixelShader>   m_pixelShader;
         Microsoft::WRL::ComPtr<ID3D11Buffer>        m_constantBuffer;
 
+		//Instance
+		Microsoft::WRL::ComPtr<ID3D11Buffer>		m_instanceBuffer;
+		D3D11_BUFFER_DESC vertexBufferDesc, instanceBufferDesc;
+		D3D11_SUBRESOURCE_DATA vertexData, instanceData;
+
         // System resources for cube geometry.
         ModelViewProjectionConstantBuffer    m_constantBufferData;
         uint32    m_indexCount;
+
+		//Instance
+		InstanceType* instances;
+		int m_instanceCount;
+
+
 
 		//for models
 		std::unique_ptr<DirectX::Model> healthbox;
@@ -97,7 +109,7 @@ namespace DirectXGame2
 		float aspectRatio;
 		float fovAngleY;
 
-		Asteroid aField[1500];
+		Asteroid aField[500];
 
 		PickUp scrapBoxes[200];
 		PickUp fuelBoxes[500];
@@ -120,7 +132,7 @@ namespace DirectXGame2
 
 		int numast, numScrap, numFuel, numUp;
 		float lootRad = 0.5;
-		float astRad = 2.0;
+		float astRad = 12.0;
 		float eRad = 1.0;
 		float baseRange = 300;
 		float baseRad = 3.0;

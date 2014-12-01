@@ -64,7 +64,7 @@ void Sample3DSceneRenderer::CameraMove(float ahead, float updown)
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-30, 0);
+		cam.CameraMove(-15, 0);
 }
 
 void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
@@ -76,7 +76,7 @@ void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-30, 0);
+		cam.CameraMove(-15, 0);
 }
 
 // Initializes view parameters when the window size changes.
@@ -131,19 +131,20 @@ void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 
 void Sample3DSceneRenderer::CreateAsteroidField()
 {
-	numast = 1500;
+	numast = 500;
 	XMVECTOR angles;
-//	debris = malloc(numast*sizeof(Asteroid));
+
 
 	for (int i = 0; i < numast; i++)
 	{
 		angles = XMVectorSet(3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 3.14*(rand() % 1000) / 1000.0f, 1.0f);
-		aField[i].setPos(XMVectorSet(600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 600 * (rand() % 1000) / 1000.0f, 1.0f));
+		aField[i].setPos(XMVectorSet(1000 * (rand() % 1000) / 2000.0f, 1000 * (rand() % 1000) / 2000.0f, 1000 * (rand() % 1000) / 2000.0f, 1.0f));
 		aField[i].setOri(XMQuaternionRotationRollPitchYawFromVector(angles));
 		angles = XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f);
 
 		aField[i].setL(XMQuaternionRotationRollPitchYawFromVector(angles));
 	}
+
 }
 
 void Sample3DSceneRenderer::CreateLootBoxes()
@@ -438,12 +439,6 @@ void Sample3DSceneRenderer::DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *the
 		0
 		);
 
-	/*context->VSSetConstantBuffers(
-		0,
-		1,
-		m_constantBuffer.GetAddressOf()
-		);*/
-
 	// Draw the objects.
 	context->DrawIndexed(
 		m_indexCount,
@@ -451,7 +446,6 @@ void Sample3DSceneRenderer::DrawOne(ID3D11DeviceContext2 *context, XMMATRIX *the
 		0
 		);
 }
-
 
 void Sample3DSceneRenderer::StartTracking()
 {
@@ -484,7 +478,7 @@ void Sample3DSceneRenderer::UpdatePlayer(DX::StepTimer const& timer)
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-30, 0);
+		cam.CameraMove(-15, 0);
 
 	// remake view matrix, store in constant buffer data
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp())));
@@ -501,7 +495,7 @@ void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
 
 	if (isWithinRange)
 	{
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < currEnemyNum; i++)
 		{
 			enemies[i].Update(timer);
 		}
@@ -528,47 +522,8 @@ void Sample3DSceneRenderer::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	CommonStates states(m_deviceResources->GetD3DDevice());
 
-    // Set render targets to the screen.
-    ID3D11RenderTargetView *const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
-    context->OMSetRenderTargets(1, targets, m_deviceResources->GetDepthStencilView());
 
-    // Each vertex is one instance of the VertexPositionColor struct.
-    UINT stride = sizeof(VertexPositionColor);
-    UINT offset = 0;
-    context->IASetVertexBuffers(
-        0,
-        1,
-        m_vertexBuffer.GetAddressOf(),
-        &stride,
-        &offset
-        );
-
-    context->IASetIndexBuffer(
-        m_indexBuffer.Get(),
-        DXGI_FORMAT_R16_UINT, // Each index is one 16-bit unsigned integer (short).
-        0
-        );
-
-    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    context->IASetInputLayout(m_inputLayout.Get());
-
-    // Attach our vertex shader.
-    context->VSSetShader(
-        m_vertexShader.Get(),
-        nullptr,
-        0
-        );
-
-    // Attach our pixel shader.
-    context->PSSetShader(
-        m_pixelShader.Get(),
-        nullptr,
-        0
-		);
-
-
-	XMMATRIX thexform;
+	XMMATRIX thexform = XMMatrixIdentity();
 	XMMATRIX local;
 	XMMATRIX view;
 	XMMATRIX proj;
@@ -577,13 +532,13 @@ void Sample3DSceneRenderer::Render()
 		fovAngleY,
 		aspectRatio,
 		0.1f,
-		1000.0f
+		600.0f
 		);
-
+	
 	//Draw enemy base
 	thexform = XMMatrixRotationQuaternion(eBaseOri);
 	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBasePos));
-	thexform = XMMatrixMultiply(XMMatrixScaling(3, 3, 3), thexform);
+	thexform = XMMatrixMultiply(XMMatrixScaling(5, 5, 5), thexform);
 	DrawOne(context, &thexform);
 
 
@@ -598,6 +553,7 @@ void Sample3DSceneRenderer::Render()
 		{
 			thexform = XMMatrixRotationQuaternion(aField[i].getOri());
 			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(aField[i].getPos()));
+			thexform = XMMatrixMultiply(XMMatrixScaling(12, 12, 12), thexform);
 			DrawOne(context, &thexform);
 			local = thexform;
 			view = XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp());
@@ -606,6 +562,7 @@ void Sample3DSceneRenderer::Render()
 			
 		}
 	}
+
 	CreateBaseCube();
 
 	// draw every lootBox
@@ -649,6 +606,7 @@ void Sample3DSceneRenderer::Render()
 	ManageScreenFlash(context);
 	ManageEnemies(context);
 	ManageTargetReticle(context);
+	
 
 	m_contextReady = true;
 }
@@ -722,9 +680,9 @@ void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
 					DrawOne(context, &thexform);
 
 
-					if (enemies[i].getDistance() > 200)
+					if (enemies[i].getDistance() > 500)
 					{
-						enemies[i].setShouldBeDel(false);
+						enemies[i].setShouldBeDel(true);
 					}
 				}
 			}
@@ -907,22 +865,7 @@ void Sample3DSceneRenderer::CreateTargetReticle()
 		)
 		);
 
-
 	auto context = m_deviceResources->GetD3DDeviceContext();
-
-	// Set render targets to the screen.
-	ID3D11RenderTargetView *const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
-	context->OMSetRenderTargets(1, targets, m_deviceResources->GetDepthStencilView());
-
-	// Prepare the constant buffer to send it to the graphics device.
-	context->UpdateSubresource(
-		m_constantBuffer.Get(),
-		0,
-		NULL,
-		&m_constantBufferData,
-		0,
-		0
-		);
 
 	// Each vertex is one instance of the VertexPositionColor struct.
 	UINT stride = sizeof(VertexPositionColor);
@@ -938,31 +881,6 @@ void Sample3DSceneRenderer::CreateTargetReticle()
 	context->IASetIndexBuffer(
 		m_indexBuffer.Get(),
 		DXGI_FORMAT_R16_UINT, // Each index is one 16-bit unsigned integer (short).
-		0
-		);
-
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	context->IASetInputLayout(m_inputLayout.Get());
-
-	// Attach our vertex shader.
-	context->VSSetShader(
-		m_vertexShader.Get(),
-		nullptr,
-		0
-		);
-
-	// Send the constant buffer to the graphics device.
-	context->VSSetConstantBuffers(
-		0,
-		1,
-		m_constantBuffer.GetAddressOf()
-		);
-
-	// Attach our pixel shader.
-	context->PSSetShader(
-		m_pixelShader.Get(),
-		nullptr,
 		0
 		);
 }
@@ -1044,6 +962,25 @@ void Sample3DSceneRenderer::CreateBaseCube() {
 		)
 		);
 
+	/*auto context = m_deviceResources->GetD3DDeviceContext();
+
+	// Each vertex is one instance of the VertexPositionColor struct.
+	UINT stride = sizeof(VertexPositionColor);
+	UINT offset = 0;
+	context->IASetVertexBuffers(
+		0,
+		1,
+		m_vertexBuffer.GetAddressOf(),
+		&stride,
+		&offset
+		);
+
+	context->IASetIndexBuffer(
+		m_indexBuffer.Get(),
+		DXGI_FORMAT_R16_UINT, // Each index is one 16-bit unsigned integer (short).
+		0
+		);*/
+
 
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
@@ -1102,6 +1039,7 @@ void Sample3DSceneRenderer::CreateBaseCube() {
 		nullptr,
 		0
 		);
+
 }
 
 
@@ -1177,20 +1115,6 @@ void Sample3DSceneRenderer::CreateScreenFlash() {
 
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
-	// Set render targets to the screen.
-	ID3D11RenderTargetView *const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
-	context->OMSetRenderTargets(1, targets, m_deviceResources->GetDepthStencilView());
-
-	// Prepare the constant buffer to send it to the graphics device.
-	context->UpdateSubresource(
-		m_constantBuffer.Get(),
-		0,
-		NULL,
-		&m_constantBufferData,
-		0,
-		0
-		);
-
 	// Each vertex is one instance of the VertexPositionColor struct.
 	UINT stride = sizeof(VertexPositionColor);
 	UINT offset = 0;
@@ -1208,30 +1132,6 @@ void Sample3DSceneRenderer::CreateScreenFlash() {
 		0
 		);
 
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	context->IASetInputLayout(m_inputLayout.Get());
-
-	// Attach our vertex shader.
-	context->VSSetShader(
-		m_vertexShader.Get(),
-		nullptr,
-		0
-		);
-
-	// Send the constant buffer to the graphics device.
-	context->VSSetConstantBuffers(
-		0,
-		1,
-		m_constantBuffer.GetAddressOf()
-		);
-
-	// Attach our pixel shader.
-	context->PSSetShader(
-		m_pixelShader.Get(),
-		nullptr,
-		0
-		);
 }
 
 void Sample3DSceneRenderer::CreateDeviceDependentResources()
@@ -1255,7 +1155,11 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
         {
             { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
             { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			//{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 1},
+			//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 1 },
+			//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 1 },
         };
+
 
         DX::ThrowIfFailed(
             m_deviceResources->GetD3DDevice()->CreateInputLayout(
