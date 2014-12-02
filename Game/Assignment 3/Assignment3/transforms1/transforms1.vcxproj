@@ -183,15 +183,23 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Image Include="Assets\aster1.dds" />
+    <Image Include="Assets\bolt.dds" />
+    <Image Include="Assets\borg.dds" />
     <Image Include="Assets\Crate Box\Texture\crate_tex.jpg" />
     <Image Include="Assets\Crate Box\Texture\crate_tex2.jpg" />
     <Image Include="Assets\Crate Box\Texture\crate_tex3.jpg" />
     <Image Include="Assets\Crate Box\Texture\crate_tex4.jpg" />
+    <Image Include="Assets\fuel.dds" />
+    <Image Include="Assets\health.dds" />
     <Image Include="Assets\Logo.png" />
+    <Image Include="Assets\red.dds" />
     <Image Include="Assets\shulk.dds" />
     <Image Include="Assets\SmallLogo.png" />
+    <Image Include="Assets\spark.dds" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\SplashScreen.png" />
+    <Image Include="Assets\upg.dds" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Content\Game Entity\Asteroid.h" />

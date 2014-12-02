@@ -173,6 +173,30 @@
     <Image Include="Assets\Crate Box\Texture\crate_tex4.jpg">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Assets\aster1.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\health.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\bolt.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\fuel.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\red.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\upg.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\borg.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\spark.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Scene.fbx">

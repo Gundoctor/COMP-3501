@@ -55,6 +55,7 @@ namespace DirectXGame2
 		void CreateEnemyBases();
 		void CreateCamera(); 
 		void CreateShip();
+		void CreateTorus();
 		void CollisionDetection(); 
 		void CreateBaseCube();
 		void CreateScreenFlash();
@@ -63,6 +64,7 @@ namespace DirectXGame2
 		void ManageBeamFire(ID3D11DeviceContext2 *context);
 		void ManageTargetReticle(ID3D11DeviceContext2 *context);
 		void ManageEnemies(ID3D11DeviceContext2 *context);
+		void ManageTorus(ID3D11DeviceContext2 *context);
 		void CheckGameOver();
 		
     private:
@@ -93,7 +95,19 @@ namespace DirectXGame2
 
 
 		//for models
-		std::unique_ptr<DirectX::Model> healthbox;
+		//std::unique_ptr<DirectX::Model> healthbox;
+
+		//for textures
+		ID3D11ShaderResourceView *textureViewAster;
+		ID3D11ShaderResourceView *textureViewHealth;
+		ID3D11ShaderResourceView *textureViewFuel;
+		ID3D11ShaderResourceView *textureViewUpg;
+		ID3D11ShaderResourceView *textureViewLaser;
+		ID3D11ShaderResourceView *textureViewRet;
+		ID3D11ShaderResourceView *textureViewEBase;
+		ID3D11ShaderResourceView *textureViewEnemy;
+
+		ID3D11SamplerState*                 mySampler;
 
         // Variables used with the rendering loop.
         bool    m_loadingComplete;
@@ -147,6 +161,7 @@ namespace DirectXGame2
 		int cameraMode = 0;
 		bool gameOver = FALSE; 
 		int swaptime = 0;
+		int spinTime = 0;
 
     };
 }

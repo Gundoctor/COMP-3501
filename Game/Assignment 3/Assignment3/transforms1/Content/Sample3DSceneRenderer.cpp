@@ -36,6 +36,7 @@ m_deviceResources(deviceResources)
 	CreateEnemyBases();
 	CreateCamera();
 	CreateShip();
+	//CreateTorus();
 }
 
 void Sample3DSceneRenderer::CreateCamera() // this is bad, we need a seperate camera if we want to be able to go third person or is another camera just a xform farther back along z?
@@ -64,7 +65,7 @@ void Sample3DSceneRenderer::CameraMove(float ahead, float updown)
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-15, 0);
+		cam.CameraMove(-15, 5);
 }
 
 void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
@@ -76,7 +77,7 @@ void Sample3DSceneRenderer::CameraSpin(float roll, float pitch, float yaw)
 	cam.setFor(ship.getForward());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-15, 0);
+		cam.CameraMove(-15, 5);
 }
 
 // Initializes view parameters when the window size changes.
@@ -113,6 +114,11 @@ void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
     XMFLOAT4X4 orientation = m_deviceResources->GetOrientationTransform3D();
 
     XMMATRIX orientationMatrix = XMLoadFloat4x4(&orientation);
+
+	static XMVECTORF32 light = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	XMStoreFloat4(&m_constantBufferData.eyepos, cam.getPos());
+	XMStoreFloat4(&m_constantBufferData.lightpos, light);
 
     XMStoreFloat4x4(
         &m_constantBufferData.projection,
@@ -196,6 +202,109 @@ void Sample3DSceneRenderer::CreateEnemyBases()
 		enemies[i].setPos(eBasePos);
 		enemies[i].setL(XMQuaternionRotationRollPitchYawFromVector(XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f)));
 	}
+}
+
+void Sample3DSceneRenderer::CreateTorus()
+{
+	int circle = 30;
+	float theta, phi;
+	XMFLOAT3 ccen;
+	float trad = 0.6;
+	float crad = 0.2;
+	int loop;
+	int segment = 30;
+	loop = 3 * segment;
+	int numvertices = circle*loop;
+	int numindices = circle*loop * 6;
+	VertexPositionColor *torusVertices;
+	VertexPositionColor thisone;
+	XMFLOAT3 thisnor;
+	torusVertices = (VertexPositionColor *)malloc(numvertices*sizeof(VertexPositionColor));
+
+
+	// torus:
+	for (int i = 0; i < loop; i++)
+	{
+
+		theta = 2 * i*3.1416 / loop; // large loop
+		//crad = 0.3 + 0.08*sin(7*theta); // vary small circle radius, 7 lobes
+		ccen = XMFLOAT3(trad*cos(theta), trad*sin(theta), 0); // centre of this small circle
+
+		for (int j = 0; j < circle; j++) // small circle
+		{
+
+			phi = 2 * j*3.1416 / circle; // from 0 to 2PI
+
+			thisnor = // normal direction
+				XMFLOAT3(cos(theta)*sin(phi), sin(theta)*sin(phi), cos(phi));
+			thisone = // position + color of this vertex
+			{
+				XMFLOAT3(ccen.x + thisnor.x*crad, ccen.y + thisnor.y*crad, ccen.z + thisnor.z*crad),
+				XMFLOAT3(i / (segment + 0.01), j / (circle + 0.01), 0.05)
+			};
+			torusVertices[i*circle + j] = thisone; // add to vertex array
+		}
+	}
+
+	WORD *torusIndices;
+	torusIndices = (WORD *)malloc(sizeof(WORD)*numindices);
+	int count = 0;
+	for (int i = 0; i < loop; i++)
+	{
+		for (int j = 0; j < circle; j++)
+		{
+			// two triangles per quad
+
+			// proper order:
+
+			//indices[count++] = WORD(((i + 1) % loop)*circle + j);
+			//indices[count++] = WORD(i*circle + ((j + 1) % circle));
+			//indices[count++] = WORD((i*circle + j));
+
+			// reversed:
+
+
+			torusIndices[count++] = WORD((i*circle + j));
+			torusIndices[count++] = WORD(i*circle + ((j + 1) % circle));
+
+			torusIndices[count++] = WORD(((i + 1) % loop)*circle + j);
+
+
+			torusIndices[count++] = WORD(((i + 1) % loop)*circle + j);
+			torusIndices[count++] = WORD(((i + 1) % loop)*circle + ((j + 1) % circle));
+			torusIndices[count++] = WORD(i*circle + ((j + 1) % circle));
+		}
+	}
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData = { 0 };
+	vertexBufferData.pSysMem = torusVertices;
+	vertexBufferData.SysMemPitch = 0;
+	vertexBufferData.SysMemSlicePitch = 0;
+	CD3D11_BUFFER_DESC vertexBufferDesc(numvertices*sizeof(VertexPositionColor), D3D11_BIND_VERTEX_BUFFER);
+	DX::ThrowIfFailed(
+		m_deviceResources->GetD3DDevice()->CreateBuffer(
+		&vertexBufferDesc,
+		&vertexBufferData,
+		&m_vertexBuffer
+		)
+		);
+
+	m_indexCount = numindices; // ARRAYSIZE(cubeIndices);
+
+	D3D11_SUBRESOURCE_DATA indexBufferData = { 0 };
+	indexBufferData.pSysMem = torusIndices;
+	indexBufferData.SysMemPitch = 0;
+	indexBufferData.SysMemSlicePitch = 0;
+	CD3D11_BUFFER_DESC indexBufferDesc(numindices*sizeof(WORD), D3D11_BIND_INDEX_BUFFER);
+	DX::ThrowIfFailed(
+		m_deviceResources->GetD3DDevice()->CreateBuffer(
+		&indexBufferDesc,
+		&indexBufferData,
+		&m_indexBuffer
+		)
+		);
+
+
 }
 
 
@@ -410,6 +519,9 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
     }
 	UpdateWorld(timer);
 	UpdatePlayer(timer);
+	spinTime++;
+	if (spinTime > 31459)
+		spinTime = 0;
 }
 
 // Rotate the 3D cube model a set amount of radians.
@@ -476,9 +588,10 @@ void Sample3DSceneRenderer::UpdatePlayer(DX::StepTimer const& timer)
 	ship.Update(timer);
 	cam.setPos(ship.getPos());
 	cam.setFor(ship.getForward());
+	cam.setOri(ship.getOri());
 	cam.setUp(ship.getUp());
 	if (cameraMode == 1)
-		cam.CameraMove(-15, 0);
+		cam.CameraMove(-15, 5);
 
 	// remake view matrix, store in constant buffer data
 	XMStoreFloat4x4(&m_constantBufferData.view, XMMatrixTranspose(XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp())));
@@ -522,8 +635,9 @@ void Sample3DSceneRenderer::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	CommonStates states(m_deviceResources->GetD3DDevice());
 
-
+	
 	XMMATRIX thexform = XMMatrixIdentity();
+	/* model stuff, lagged too much
 	XMMATRIX local;
 	XMMATRIX view;
 	XMMATRIX proj;
@@ -534,7 +648,12 @@ void Sample3DSceneRenderer::Render()
 		0.1f,
 		600.0f
 		);
-	
+	*/
+
+	context->PSSetShaderResources(0, 1, &textureViewEBase);
+	//context->PSSetShaderResources(1, 1, &textureView2);
+	context->PSSetSamplers(0, 1, &mySampler);
+
 	//Draw enemy base
 	thexform = XMMatrixRotationQuaternion(eBaseOri);
 	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBasePos));
@@ -545,7 +664,8 @@ void Sample3DSceneRenderer::Render()
 	ManageBeamFire(context);
 
 
-	
+	context->PSSetShaderResources(0, 1, &textureViewAster);
+
 	for (int i = 0; i < numast; i++)
 	{ // draw every asteroid
 		//draw not "destroyed" asteroids
@@ -555,17 +675,19 @@ void Sample3DSceneRenderer::Render()
 			thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(aField[i].getPos()));
 			thexform = XMMatrixMultiply(XMMatrixScaling(12, 12, 12), thexform);
 			DrawOne(context, &thexform);
-			local = thexform;
-			view = XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp());
+			//local = thexform;
+			//view = XMMatrixLookToRH(cam.getPos(), cam.getForward(), cam.getUp());
 			
 			//healthbox->Draw(context, states, local, view, proj);
 			
 		}
 	}
 
-	CreateBaseCube();
+	//CreateBaseCube();
 
 	// draw every lootBox
+
+	context->PSSetShaderResources(0, 1, &textureViewHealth);
 	for (int i = 0; i < numScrap; i++)
 	{ 
 		//draw not "destroyed" health pickups
@@ -577,6 +699,7 @@ void Sample3DSceneRenderer::Render()
 			
 		}
 	}
+	context->PSSetShaderResources(0, 1, &textureViewFuel);
 	for (int i = 0; i < numFuel; i++)
 	{
 		//draw not "destroyed" lootBoxes
@@ -587,6 +710,7 @@ void Sample3DSceneRenderer::Render()
 			DrawOne(context, &thexform);
 		}
 	}
+	context->PSSetShaderResources(0, 1, &textureViewUpg);
 	for (int i = 0; i < numUp; i++)
 	{
 		//draw not "destroyed" lootBoxes
@@ -598,14 +722,15 @@ void Sample3DSceneRenderer::Render()
 		}
 	}
 
-	XMFLOAT4 camPos;
-	XMStoreFloat4(&camPos, ship.getPos());
+	//XMFLOAT4 camPos;
+	//XMStoreFloat4(&camPos, ship.getPos());
 	
 	
 
 	ManageScreenFlash(context);
 	ManageEnemies(context);
 	ManageTargetReticle(context);
+	ManageTorus(context);
 	
 
 	m_contextReady = true;
@@ -640,6 +765,10 @@ void Sample3DSceneRenderer::SwapCamera()
 void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
 {
 	XMMATRIX thexform;
+
+	context->PSSetShaderResources(0, 1, &textureViewEnemy);
+	//context->PSSetShaderResources(1, 1, &textureView2);
+	context->PSSetSamplers(0, 1, &mySampler);
 
 	if (isWithinRange)
 	{
@@ -690,11 +819,72 @@ void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
 	}
 }
 
+void Sample3DSceneRenderer::ManageTorus(ID3D11DeviceContext2 *context)
+{
+	CreateBaseCube();
+	XMMATRIX thexform = XMMatrixIdentity();
+	XMMATRIX base;
+	 
+	
+	thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
+	
+	thexform = XMMatrixMultiply(XMMatrixRotationQuaternion(ship.getOri()), thexform);
+
+	thexform = XMMatrixMultiply(XMMatrixScaling(2.4, 0.9, 4.5), thexform);
+	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getForward()), thexform);
+	
+	
+
+	DrawOne(context, &thexform);
+
+	thexform = XMMatrixIdentity();
+
+
+
+	
+	thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
+	
+	thexform = XMMatrixMultiply(XMMatrixRotationQuaternion(ship.getOri()), thexform);
+	base = thexform;
+	thexform = XMMatrixMultiply(XMMatrixScaling(0.3, 1.5, 0.3), thexform);
+	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getForward()), thexform);
+	
+	DrawOne(context, &thexform);
+
+	thexform = XMMatrixIdentity();
+	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getPos()), thexform);
+	thexform = XMMatrixMultiply(thexform, XMMatrixRotationY(spinTime % 1000));
+	
+	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
+	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getForward()), thexform);
+	thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getUp()), thexform);
+
+	thexform = XMMatrixMultiply(XMMatrixRotationQuaternion(ship.getOri()), thexform);
+
+
+	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
+	
+	thexform = XMMatrixMultiply(XMMatrixScaling(5.4, 0.3, 0.3), thexform);
+	thexform = XMMatrixMultiply(base, thexform);
+
+
+	DrawOne(context, &thexform);
+
+	
+
+
+}
+
 void Sample3DSceneRenderer::ManageBeamFire(ID3D11DeviceContext2 *context)
 {
 	CreateBaseCube();
 
 	XMMATRIX thexform;
+
+	context->PSSetShaderResources(0, 1, &textureViewLaser);
+	//context->PSSetShaderResources(1, 1, &textureView2);
+	context->PSSetSamplers(0, 1, &mySampler);
+
 
 	Beam *sBeams = ship.getBeams();
 
@@ -723,7 +913,11 @@ void Sample3DSceneRenderer::ManageScreenFlash(ID3D11DeviceContext2 *context)
 {
 	XMMATRIX thexform;
 
-	CreateScreenFlash();
+	context->PSSetShaderResources(0, 1, &textureViewRet);
+	//context->PSSetShaderResources(1, 1, &textureView2);
+	context->PSSetSamplers(0, 1, &mySampler);
+
+	//CreateScreenFlash();
 
 	int stunTimer = ship.getStunTimer();
 	int stunTime = ship.getStunTime();
@@ -753,12 +947,16 @@ void Sample3DSceneRenderer::ManageScreenFlash(ID3D11DeviceContext2 *context)
 
 void Sample3DSceneRenderer::ManageTargetReticle(ID3D11DeviceContext2 *context)
 {
-	CreateTargetReticle();
+	//CreateTargetReticle();
 
 	XMMATRIX thexform;
 	XMVECTOR L, camcpy;
 
 	camcpy = ship.getPos();
+	context->PSSetShaderResources(0, 1, &textureViewRet);
+	//context->PSSetShaderResources(1, 1, &textureView2);
+	context->PSSetSamplers(0, 1, &mySampler);
+
 
 	//left bar
 	thexform = XMMatrixTranslationFromVector(XMVectorAdd(camcpy, XMVectorScale(ship.getForward(), 6.0)));
@@ -801,14 +999,20 @@ void Sample3DSceneRenderer::CreateTargetReticle()
 	// Load mesh vertices. Each vertex has a position and a color.
 	static const VertexPositionColor cubeVertices[] =
 	{
-		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT2(0.0, 0.0) },
+		{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT2(1.0, 1.0) },
+		{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT2(1.0, 0.0) },
+		{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT2(0.0, 0.0) },
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT2(0.0, 1.0) },
+		{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT2(1.0, 0.0) },
+		{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT2(1.0, 1.0) },
+		{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT2(0.0, 1.0) },
+
+		//the laser
+		//{ XMFLOAT3(0.25f, -0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(-0.25f, -0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(-0.25f, 0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(0.25f, 0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
 	};
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData = { 0 };
@@ -898,14 +1102,20 @@ void Sample3DSceneRenderer::CreateBaseCube() {
 	// Load mesh vertices. Each vertex has a position and a color.
 	static const VertexPositionColor cubeVertices[] =
 	{
-		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(1.0f, 1.0f, 1.0f) }
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT2(0.0, 0.0) },
+		{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT2(1.0, 1.0) },
+		{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT2(1.0, 0.0) },
+		{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT2(0.0, 0.0) },
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT2(0.0, 1.0) },
+		{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT2(1.0, 0.0) },
+		{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT2(1.0, 1.0) },
+		{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT2(0.0, 1.0) },
+
+		//the laser
+		//{ XMFLOAT3(0.25f, -0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(-0.25f, -0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(-0.25f, 0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(0.25f, 0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
 	};
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData = { 0 };
@@ -1048,14 +1258,20 @@ void Sample3DSceneRenderer::CreateScreenFlash() {
 	// Load mesh vertices. Each vertex has a position and a color.
 	static const VertexPositionColor cubeVertices[] =
 	{
-		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) },
-		{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.5f, 0.0f, 0.0f) }
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT2(0.0, 0.0) },
+		{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT2(1.0, 1.0) },
+		{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT2(1.0, 0.0) },
+		{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT2(0.0, 0.0) },
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT2(0.0, 1.0) },
+		{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT2(1.0, 0.0) },
+		{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT2(1.0, 1.0) },
+		{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT2(0.0, 1.0) },
+
+		//the laser
+		//{ XMFLOAT3(0.25f, -0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(-0.25f, -0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(-0.25f, 0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		//{ XMFLOAT3(0.25f, 0.25f, 0.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
 	};
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData = { 0 };
@@ -1151,14 +1367,13 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
                 )
             );
 
-        static const D3D11_INPUT_ELEMENT_DESC vertexDesc [] =
-        {
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			//{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 1},
-			//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 1 },
-			//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 1 },
-        };
+		static const D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 36, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
 
 
         DX::ThrowIfFailed(
@@ -1193,13 +1408,96 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
             );
     });
 
-	DGSLEffectFactory fx(m_deviceResources->GetD3DDevice());
-	healthbox = Model::CreateFromCMO(m_deviceResources->GetD3DDevice(), L"Scene.cmo", fx);
+	//DGSLEffectFactory fx(m_deviceResources->GetD3DDevice());
+	//healthbox = Model::CreateFromCMO(m_deviceResources->GetD3DDevice(), L"Scene.cmo", fx);
 
     // Once both shaders are loaded, create the mesh.
 	auto createCubeTask = (createPSTask && createVSTask).then([this]() {
 		CreateBaseCube();
     });
+
+	auto context = m_deviceResources->GetD3DDeviceContext();
+
+
+
+	ID3D11Resource *pp;
+
+
+	//load texture 1
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/aster1.dds",
+		&pp,
+		&textureViewAster,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/health.dds",
+		&pp,
+		&textureViewHealth,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/Fuel.dds",
+		&pp,
+		&textureViewFuel,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/bolt.dds",
+		&pp,
+		&textureViewLaser,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/red.dds",
+		&pp,
+		&textureViewRet,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/Upg.dds",
+		&pp,
+		&textureViewUpg,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/borg.dds",
+		&pp,
+		&textureViewEBase,
+		0);
+	CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+		L"Assets/spark.dds",
+		&pp,
+		&textureViewEnemy,
+		0);
+
+	
+
+	//load texture 2
+	//CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), context,
+	//	L"Assets/800px-Homer_drool.dds",
+	//	&pp,
+	//	&textureView2,
+	//	0);
+
+
+	// Create the sampler state
+	mySampler = NULL;
+
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	m_deviceResources->GetD3DDevice()->CreateSamplerState(&sampDesc, &mySampler);
+
+
+
+
+
+	//add the texture2 and sampler to the pixel shader:
+	context->PSSetShaderResources(0, 1, &textureViewAster);
+	//context->PSSetShaderResources(1, 1, &textureView2);
+	context->PSSetSamplers(0, 1, &mySampler);
+
 
     // Once the cube is loaded, the object is ready to be rendered.
     createCubeTask.then([this] () {
