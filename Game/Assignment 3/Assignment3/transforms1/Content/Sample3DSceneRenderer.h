@@ -146,7 +146,7 @@ namespace DirectXGame2
 
 		int numast, numScrap, numFuel, numUp;
 		float lootRad = 0.5;
-		float astRad = 12.0;
+		float astRad = 10.0;
 		float eRad = 1.0;
 		float baseRange = 300;
 		float baseRad = 3.0;

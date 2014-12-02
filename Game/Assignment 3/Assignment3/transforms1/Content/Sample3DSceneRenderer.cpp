@@ -824,16 +824,16 @@ void Sample3DSceneRenderer::ManageTorus(ID3D11DeviceContext2 *context)
 	CreateBaseCube();
 	XMMATRIX thexform = XMMatrixIdentity();
 	XMMATRIX base;
-	 
-	
-	thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
-	
-	thexform = XMMatrixMultiply(XMMatrixRotationQuaternion(ship.getOri()), thexform);
+
+
+	thexform = XMMatrixMultiply(thexform, XMMatrixRotationQuaternion(ship.getOri()));
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(ship.getPos()));
+
 
 	thexform = XMMatrixMultiply(XMMatrixScaling(2.4, 0.9, 4.5), thexform);
 	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getForward()), thexform);
-	
-	
+
+
 
 	DrawOne(context, &thexform);
 
@@ -841,34 +841,43 @@ void Sample3DSceneRenderer::ManageTorus(ID3D11DeviceContext2 *context)
 
 
 
-	
-	thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
-	
-	thexform = XMMatrixMultiply(XMMatrixRotationQuaternion(ship.getOri()), thexform);
+
+
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslation(0.0, 0.0, -1.2));
+	thexform = XMMatrixMultiply(thexform, XMMatrixRotationQuaternion(ship.getOri()));
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(ship.getPos()));
+
+
 	base = thexform;
+
 	thexform = XMMatrixMultiply(XMMatrixScaling(0.3, 1.5, 0.3), thexform);
 	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getForward()), thexform);
-	
+
 	DrawOne(context, &thexform);
 
 	thexform = XMMatrixIdentity();
 	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getPos()), thexform);
 	thexform = XMMatrixMultiply(thexform, XMMatrixRotationY(spinTime % 1000));
-	
+
 	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
 	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(-1 * ship.getForward()), thexform);
-	thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getUp()), thexform);
 
-	thexform = XMMatrixMultiply(XMMatrixRotationQuaternion(ship.getOri()), thexform);
+	//thexform = XMMatrixMultiply(thexform, XMMatrixRotationQuaternion(ship.getOri()));
+	//thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(ship.getUp()));
+
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslation(0.0, 1.0, 0.0));
+
 
 
 	//thexform = XMMatrixMultiply(XMMatrixTranslationFromVector(ship.getPos()), thexform);
-	
+
+	thexform = XMMatrixMultiply(thexform, base);
+
 	thexform = XMMatrixMultiply(XMMatrixScaling(5.4, 0.3, 0.3), thexform);
-	thexform = XMMatrixMultiply(base, thexform);
 
 
 	DrawOne(context, &thexform);
+
 
 	
 
