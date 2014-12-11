@@ -19,6 +19,7 @@
 #include ".\Content\Game Entity\Asteroid.h"
 #include ".\Content\Game Entity\PickUP.h"
 #include ".\Content\Game Entity\Enemy.h"
+#include ".\Content\Game Entity\EnemyBase.h"
 
 
 using namespace DirectX;
@@ -125,22 +126,14 @@ namespace DirectXGame2
 
 		Asteroid aField[500];
 
-		PickUp scrapBoxes[200];
-		PickUp fuelBoxes[500];
-		PickUp upgradeBoxes[50];
+		PickUp scrapBoxes[20];
+		PickUp fuelBoxes[50];
+		PickUp upgradeBoxes[10];
 
 		//all this stuff will be changed later
-		Enemy enemies[10];
-		XMVECTOR eBasePos;
-		XMVECTOR eBaseOri;
-		XMVECTOR eBaseL;
-		float turnAngle;
-		bool isWithinRange = false;
-		bool launchOK = false;
-		bool startLaunch = false;
-		int enemyLaunchCounter = 1000;
-		int enemyLaunchCount = 80;
-		int currEnemyNum = 0;
+		EnemyBase eBase1;
+		EnemyBase eBase2;
+
 
 		int coldettccounter = 0;
 

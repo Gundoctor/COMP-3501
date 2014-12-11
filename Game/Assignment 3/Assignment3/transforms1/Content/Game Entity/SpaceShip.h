@@ -72,7 +72,7 @@ namespace DirectXGame2{
 		bool beamFired;
 		int coolDownTimer;
 		int coolDownTime;
-		int maxBeamDistance = 75;
+		int maxBeamDistance = 100;
 	};
 }
 

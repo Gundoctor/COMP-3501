@@ -206,6 +206,7 @@
     <ClInclude Include="Content\Game Entity\Beam.h" />
     <ClInclude Include="Content\Game Entity\Camera.h" />
     <ClInclude Include="Content\Game Entity\Enemy.h" />
+    <ClInclude Include="Content\Game Entity\EnemyBase.h" />
     <ClInclude Include="Content\Game Entity\GameEntity.h" />
     <ClInclude Include="Content\Game Entity\PickUP.h" />
     <ClInclude Include="Content\Game Entity\SpaceShip.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="Content\Game Entity\Beam.cpp" />
     <ClCompile Include="Content\Game Entity\Camera.cpp" />
     <ClCompile Include="Content\Game Entity\Enemy.cpp" />
+    <ClCompile Include="Content\Game Entity\EnemyBase.cpp" />
     <ClCompile Include="Content\Game Entity\GameEntity.cpp" />
     <ClCompile Include="Content\Game Entity\PickUp.cpp" />
     <ClCompile Include="Content\Game Entity\SpaceShip.cpp" />

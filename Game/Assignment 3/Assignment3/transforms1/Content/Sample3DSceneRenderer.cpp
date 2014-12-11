@@ -193,15 +193,8 @@ void Sample3DSceneRenderer::CreateLootBoxes()
 
 void Sample3DSceneRenderer::CreateEnemyBases()
 {
-	eBasePos = XMVectorSet(400, 500, 300, 1.0f);
-	eBaseOri = XMQuaternionRotationRollPitchYawFromVector(XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f));
-
-	for (int i = 0; i < 10; i++)
-	{
-		enemies[i].setOri(eBaseOri);
-		enemies[i].setPos(eBasePos);
-		enemies[i].setL(XMQuaternionRotationRollPitchYawFromVector(XMVectorSet(0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 0.01*3.14*(rand() % 1000) / 1000.0f, 1.0f)));
-	}
+	eBase1.setupBase(XMVectorSet(400, 500, 300, 1.0f));
+	eBase2.setupBase(XMVectorSet(350, 400, 300, 1.0f));
 }
 
 void Sample3DSceneRenderer::CreateTorus()
@@ -304,7 +297,8 @@ void Sample3DSceneRenderer::CreateTorus()
 		)
 		);
 
-
+	delete[] torusIndices;
+	delete[] torusVertices;
 }
 
 
@@ -451,11 +445,10 @@ void Sample3DSceneRenderer::CollisionDetection()
 	}
 
 
-
-
+	//Base 1
 	XMFLOAT4 camPos, basePos;
 	XMStoreFloat4(&camPos, ship.getPos());
-	XMStoreFloat4(&basePos, eBasePos);
+	XMStoreFloat4(&basePos, eBase1.getPos());
 
 	float dx = camPos.x - basePos.x;
 	float dy = camPos.y - basePos.y;
@@ -466,38 +459,92 @@ void Sample3DSceneRenderer::CollisionDetection()
 	{
 		ship.setIsHit(true);
 		ship.setIsHit2(true);
-		ship.setHitVector(XMVectorSubtract(eBasePos, ship.getPos()));
+		ship.setHitVector(XMVectorSubtract(eBase1.getPos(), ship.getPos()));
 	}
 
-	if (!isWithinRange)
+	if (!eBase1.getIsWithinRange())
 	{
 		if (fabs(length) < baseRange + shipRad)
 		{
-			isWithinRange = true;
-			launchOK = true;
+			eBase1.setIsWithinRange(true);
+			eBase1.setLaunchOK(true);
 		}
 	}
 	else
 	{
+		Enemy* e = eBase1.getEnemies(); 
+
 		//check to see if we hit an enemy
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < eBase1.getMaxEnemyNum(); i++)
 		{
 			XMFLOAT4 camPos, enPos;
 			XMStoreFloat4(&camPos, ship.getPos());
-			XMStoreFloat4(&enPos, enemies[i].getPos());
+			XMStoreFloat4(&enPos, e[i].getPos());
 
 			float dx = camPos.x - enPos.x;
 			float dy = camPos.y - enPos.y;
 			float dz = camPos.z - enPos.z;
 			float length = sqrt(dx*dx + dy*dy + dz*dz);
 
-			if (fabs(length) < eRad + shipRad && !enemies[i].getShouldBeDel())
+			if (fabs(length) < eRad + shipRad && !e[i].getShouldBeDel())
 			{
-				enemies[i].setShouldBeDel(true);
+				e[i].setShouldBeDel(true);
 				ship.setIsHit(true);
 				ship.setIsHit2(true);
-				ship.setHitVector(XMVectorSubtract(enemies[i].getPos(), ship.getPos()));
+				ship.setHitVector(XMVectorSubtract(e[i].getPos(), ship.getPos()));
  				health--;
+			}
+		}
+	}
+
+
+	//XMFLOAT4 camPos, basePos;
+	XMStoreFloat4(&camPos, ship.getPos());
+	XMStoreFloat4(&basePos, eBase2.getPos());
+
+	dx = camPos.x - basePos.x;
+	dy = camPos.y - basePos.y;
+	dz = camPos.z - basePos.z;
+	length = sqrt(dx*dx + dy*dy + dz*dz);
+
+	if (fabs(length) < baseRad + shipRad)
+	{
+		ship.setIsHit(true);
+		ship.setIsHit2(true);
+		ship.setHitVector(XMVectorSubtract(eBase2.getPos(), ship.getPos()));
+	}
+
+	if (!eBase2.getIsWithinRange())
+	{
+		if (fabs(length) < baseRange + shipRad)
+		{
+			eBase2.setIsWithinRange(true);
+			eBase2.setLaunchOK(true);
+		}
+	}
+	else
+	{
+		Enemy* e = eBase2.getEnemies();
+
+		//check to see if we hit an enemy
+		for (int i = 0; i < eBase2.getMaxEnemyNum(); i++)
+		{
+			XMFLOAT4 camPos, enPos;
+			XMStoreFloat4(&camPos, ship.getPos());
+			XMStoreFloat4(&enPos, e[i].getPos());
+
+			float dx = camPos.x - enPos.x;
+			float dy = camPos.y - enPos.y;
+			float dz = camPos.z - enPos.z;
+			float length = sqrt(dx*dx + dy*dy + dz*dz);
+
+			if (fabs(length) < eRad + shipRad && !e[i].getShouldBeDel())
+			{
+				e[i].setShouldBeDel(true);
+				ship.setIsHit(true);
+				ship.setIsHit2(true);
+				ship.setHitVector(XMVectorSubtract(e[i].getPos(), ship.getPos()));
+				health--;
 			}
 		}
 	}
@@ -606,13 +653,20 @@ void Sample3DSceneRenderer::UpdateWorld(DX::StepTimer const& timer)
 		aField[i].Update(timer);
 	}
 
-	if (isWithinRange)
+	/*if (isWithinRange)
 	{
 		for (int i = 0; i < currEnemyNum; i++)
 		{
 			enemies[i].Update(timer);
 		}
-	}
+	}*/
+
+	eBase1.Update(timer);
+	eBase1.manageEnemies(ship.getPos());
+
+	eBase2.Update(timer);
+	eBase2.manageEnemies(ship.getPos());
+
 	//enable camera swapping again.
 	if (swaptime >= 0)
 		swaptime--;
@@ -655,8 +709,14 @@ void Sample3DSceneRenderer::Render()
 	context->PSSetSamplers(0, 1, &mySampler);
 
 	//Draw enemy base
-	thexform = XMMatrixRotationQuaternion(eBaseOri);
-	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBasePos));
+	thexform = XMMatrixRotationQuaternion(eBase1.getOri());
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBase1.getPos()));
+	thexform = XMMatrixMultiply(XMMatrixScaling(5, 5, 5), thexform);
+	DrawOne(context, &thexform);
+
+	//Draw enemy base 2
+	thexform = XMMatrixRotationQuaternion(eBase2.getOri());
+	thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(eBase2.getPos()));
 	thexform = XMMatrixMultiply(XMMatrixScaling(5, 5, 5), thexform);
 	DrawOne(context, &thexform);
 
@@ -721,10 +781,6 @@ void Sample3DSceneRenderer::Render()
 			DrawOne(context, &thexform);
 		}
 	}
-
-	//XMFLOAT4 camPos;
-	//XMStoreFloat4(&camPos, ship.getPos());
-	
 	
 
 	ManageScreenFlash(context);
@@ -770,50 +826,36 @@ void Sample3DSceneRenderer::ManageEnemies(ID3D11DeviceContext2 *context)
 	//context->PSSetShaderResources(1, 1, &textureView2);
 	context->PSSetSamplers(0, 1, &mySampler);
 
-	if (isWithinRange)
+	Enemy* e1 = eBase1.getEnemies();
+
+	if (eBase1.getIsWithinRange())
 	{
-		if (currEnemyNum <= 10)
+		for (int i = 0; i < eBase1.getCurrEnemyNum(); i++)
 		{
-			if (launchOK)
+			if (!e1[i].getShouldBeDel())
 			{
-				enemyLaunchCounter = 0;
+				thexform = XMMatrixRotationQuaternion(e1[i].getOri());
+				thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(e1[i].getPos()));
+				thexform = XMMatrixMultiply(XMMatrixScaling(0.5, 0.5, 0.5), thexform);
+				DrawOne(context, &thexform);
 
-				enemies[currEnemyNum].setSpeed(0.5);
-				++currEnemyNum;
+			}
+		}
+	}
 
-				launchOK = false;
-			}
-			else if (enemyLaunchCounter < enemyLaunchCount) {
-				enemyLaunchCounter++;
-			}
-			else if (enemyLaunchCounter == enemyLaunchCount && currEnemyNum != 10)
+	Enemy* e2 = eBase2.getEnemies();
+
+	if (eBase2.getIsWithinRange())
+	{
+		for (int i = 0; i < eBase2.getCurrEnemyNum(); i++)
+		{
+			if (!e2[i].getShouldBeDel())
 			{
-				enemyLaunchCounter++;
-				launchOK = true;
-			}
+				thexform = XMMatrixRotationQuaternion(e2[i].getOri());
+				thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(e2[i].getPos()));
+				thexform = XMMatrixMultiply(XMMatrixScaling(0.5, 0.5, 0.5), thexform);
+				DrawOne(context, &thexform);
 
-			for (int i = 0; i < currEnemyNum; i++)
-			{
-				if (!enemies[i].getShouldBeDel())
-				{
-					//lazy way for now
-					XMVECTOR shipDir = XMVectorSubtract(ship.getPos(), enemies[i].getPos());
-					shipDir = XMVector4Normalize(shipDir);
-
-					enemies[i].setForward(shipDir);
-
-
-					thexform = XMMatrixRotationQuaternion(enemies[i].getOri());
-					thexform = XMMatrixMultiply(thexform, XMMatrixTranslationFromVector(enemies[i].getPos()));
-					thexform = XMMatrixMultiply(XMMatrixScaling(0.5, 0.5, 0.5), thexform);
-					DrawOne(context, &thexform);
-
-
-					if (enemies[i].getDistance() > 500)
-					{
-						enemies[i].setShouldBeDel(true);
-					}
-				}
 			}
 		}
 	}

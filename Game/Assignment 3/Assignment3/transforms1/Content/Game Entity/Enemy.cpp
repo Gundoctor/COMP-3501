@@ -27,6 +27,7 @@ void Enemy::Update(DX::StepTimer const& timer)
 	ori = XMQuaternionMultiply(XMQuaternionMultiply(ori, L), L);
 	ori = XMQuaternionMultiply(XMQuaternionMultiply(ori, L), L);
 	ori = XMQuaternionMultiply(XMQuaternionMultiply(ori, L), L);
+
 }
 
 

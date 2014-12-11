@@ -118,6 +118,9 @@
     <ClCompile Include="Content\Game Entity\Camera.cpp">
       <Filter>Content\Game Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Content\Game Entity\EnemyBase.cpp">
+      <Filter>Content\Game Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
@@ -143,6 +146,9 @@
       <Filter>Content\Game Entity</Filter>
     </ClInclude>
     <ClInclude Include="Content\Game Entity\Camera.h">
+      <Filter>Content\Game Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Game Entity\EnemyBase.h">
       <Filter>Content\Game Entity</Filter>
     </ClInclude>
   </ItemGroup>
