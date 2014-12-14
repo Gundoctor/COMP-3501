@@ -1,0 +1,8 @@
+﻿Build started 12/14/2014 1:10:16 PM.
+     1>Project "D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Scavenger Hunt\Scavenger Hunt\transforms1\transforms1.vcxproj" on node 2 (Clean target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'd:\folders\documents\carleton\third year\game programming\game\comp-3501\game\scavenger hunt\scavenger hunt\debug\transforms1\scavenger hunt.pdb' because it is being used by another process.
+     1>Done Building Project "D:\Folders\Documents\Carleton\Third Year\Game Programming\Game\COMP-3501\Game\Scavenger Hunt\Scavenger Hunt\transforms1\transforms1.vcxproj" (Clean target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.08
